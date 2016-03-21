@@ -1,36 +1,75 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <strings.h>
+#include <time.h>
+#include "game.h"
 
-#define SEEDS_PER_BOWL 10
 
-typedef enum {bottom = 0, top} player_t;
-typedef enum {false = 0, true} bool;
-typedef enum {INIT_STATE, PLAY_STATE, CONFIG_STATE, ERROR_STATE, EXIT_STATE} state_t;
-typedef struct {
-    int board[2][7];
-    player_t player;
-} game_t;
+game_t * initGame() {
 
-static game_t * game;
+    short i;
+    short iniSeeds;
+    game_t * game;
+    game  = malloc(sizeof(game_t));
 
-void initGame() {
-    int i;
-    game = malloc(sizeof(game_t));
+    do { 
+        iniSeeds = rand() % 10; 
+    } while (iniSeeds < 4);
+
     for (i = 0; i < 14; i++) {
-       (*game->board)[i] = SEEDS_PER_BOWL;
+       (*game->board)[i] = iniSeeds;
     }
 
+   
     game->board[0][6] = 0;
     game->board[1][6] = 0;
-    game->player = rand();
+    game->player = rand() % 2;
+    game->player = human;
+    return game;
 }
 
-state_t playGame() {
+state_t playGame(game_t * game) {
+
+    short move;
+    char input;
+
+    while (! isEndGame(game)) {
+        
+        if (game->player == human) {
+
+            while ((input = getchar()) == '\n' || input == EOF);
+            
+            if (input == 'q') {
+
+                return EXIT_STATE;
+
+            }
+
+            move = input - 'A';
+
+            if (move >= 0 && move <= 5) {
+                doMove(game, move);
+                displayBoard(game);
+            } else {
+                printf("Error: please choose a value between 'A' and 'F'\n");
+            }
+
+        } else {
+            do {
+                move = rand() % 6;
+                printf("rand = %d\n", move);
+            } while (game->board[computer][move] == 0);
+            
+            doMove(game, move);
+            displayBoard(game);
+        }
+    }
+
+    return ENDGAME_STATE;
 
 }
 
-void move(int bowlNum){
+void doMove(game_t * game, int bowlNum) {
 
     int player = game->player;
     int opponent = !player;
@@ -38,13 +77,13 @@ void move(int bowlNum){
     int seeds = game->board[player][bowlNum];
     int i;
     int lastBowlNum = (bowlNum + seeds) % 7;
-    int lastBowlOwner = (((bowlNum + seeds) % 14 > 6))?player:opponent;
+    int lastBowlOwner = (((bowlNum + seeds) % 14 < 6))?player:opponent;
     int seedsInLastBowl = game->board[lastBowlOwner][lastBowlNum];
 
     game->board[player][bowlNum] = 0;
 
     for (i = 1; i <= seeds; i++){
-        (*game->board)[(bowlNum + i) % 14] ++;
+        (*game->board)[(bowlNum + offset + i) % 14] ++;
     }
 
 
@@ -81,12 +120,20 @@ void move(int bowlNum){
 
 
 int main(){
+
+    srand(time(NULL));
     stateMachine();
-    return 1;
+    printf("Bye bye!\n");
+    exit(0);
+
 }
 
-int displayBoard(int board[]){
+void displayBoard(game_t * game) {
+
+
     int i,j,k;
+    int * board;
+    board = &(game->board[0][0]);
 
 /* Un peu de decoration */    
         
@@ -125,7 +172,7 @@ int displayBoard(int board[]){
 /* Les deux bols a la droite des joueurs (les scores) */
 
     printf("    ");
-    for (j = 0; j <= 64; j++){
+    for (j = 0; j <= 64; j++) {
         if (j > 8 && j < 56) {
             printf("-");
         } else if (!(j % 8)) {
@@ -174,16 +221,15 @@ int displayBoard(int board[]){
     };
     printf("+");
     printf("\n");
-    return 1;
 }
 
-int displayError() {
+void displayError() {
     printf("Error");
 }
 
-bool endGame() {
+bool isEndGame(game_t * game) {
 
-    player_t player;
+    short player;
     short bowlNum;
     short emptyBowls = 0;
 
@@ -197,62 +243,77 @@ bool endGame() {
             }
         }
     }
+    
+    return false;
 }
 
-int stateMachine() {
+void printScore(game_t * game) {
+    printf("Your score: %d\n", game->board[human][6]);
+    printf("Score of the computer: %d\n", game->board[computer][6]);
+}
+
+void stateMachine() {
 
     int move;
-    char input = getchar();
-    printf("%c", input);
+    char input;
     state_t state = INIT_STATE;
+    game_t * game;
 
     while (state != EXIT_STATE) {
 
         switch (state) {
 
             case INIT_STATE :
-
+                
+                while ((input = getchar()) == '\n' || input == EOF);
+ 
                 switch(input) {
 
-                    case 'q' :
-
+                    case 'q':
                         state = EXIT_STATE;
                         break;
                     
-                    case 'p' :
-
-                        initGame(&game);
+                    case 'p':
                         state = PLAY_STATE;
                         break;
 
-                    default :
-
-                        printf("%c", input);
+                    default:
                         displayError();
                 }
                 
                 break;
 
             case PLAY_STATE:
-                
-                input = getchar();                                 
-                move = input - 'A';
-
-                if (move >= 0 && move <= 5) {
-                    playGame(move);
-                }
-
+               /*
+                * On delegue la gestion du jeu a 
+                * la fonction playGame, jusqu'a la fin de la partie
+                */ 
+                game = initGame();
+                state = playGame(game);
                 break;
+            
+            case ENDGAME_STATE :
 
-            case EXIT_STATE :
-                printf("Exit!");
-                return;
+                printScore(game);
+                printf("Do you want to play a new game?\n");
+                do {scanf("%c", &input); } while (input == 32 || input == 9);
 
+                switch(input) {
+
+                    case 'q':
+                        state = EXIT_STATE;
+                        break;
+                    
+                    case 'p':
+                        state = INIT_STATE;
+                        break;
+
+                    default:
+                        displayError();
+                }
+                break;
         }
     }
 
     /* Quitte la fonction, et le jeu */
-
-    printf("Bye bye!");
 }
-
