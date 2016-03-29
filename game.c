@@ -1,3 +1,26 @@
+
+     *********************************************************************
+     *                                                                   *
+     *                                                                   *
+     *                        Welcome to Bantumi!                        *
+     *                                                                   *
+     *                                                                   *
+     *********************************************************************
+
+
+Make a selection:
+
+(Q)uit the game
+(P)lay
+
+Your choice> ^C
+julien@julien-ThinkPad-T420:~/Documents/Cours/bantumi$ vi bantumi.c
+julien@julien-ThinkPad-T420:~/Documents/Cours/bantumi$ vi game.c
+julien@julien-ThinkPad-T420:~/Documents/Cours/bantumi$ git commit
+Aborting commit due to empty commit message.
+julien@julien-ThinkPad-T420:~/Documents/Cours/bantumi$ git commit
+Aborting commit due to empty commit message.
+julien@julien-ThinkPad-T420:~/Documents/Cours/bantumi$ cat game.c
 #include <stdio.h>
 #include <stdlib.h>
 #include <strings.h>
@@ -32,6 +55,8 @@ state_t playGame(game_t * game) {
 
     short move;
     char input;
+    
+    printf("Enter the coordinate of the bowl you want to play:\n\n");
 
     while (! isEndGame(game)) {
         
@@ -137,7 +162,7 @@ void displayBoard(game_t * game) {
 
 /* Un peu de decoration */    
         
-    printf("    ");
+    printf("       ");
     printf("+");
     for (j = 1; j < 64; j++){
         printf("-");
@@ -149,7 +174,7 @@ void displayBoard(game_t * game) {
     k = 14;
 
     for (i=0;i<3;i++){
-        printf("    ");
+        printf("       ");
         for (j=0;j<=64;j++){
             if (j % 8 == 0){
                 printf("|");
@@ -171,7 +196,7 @@ void displayBoard(game_t * game) {
     
 /* Les deux bols a la droite des joueurs (les scores) */
 
-    printf("    ");
+    printf("       ");
     for (j = 0; j <= 64; j++) {
         if (j > 8 && j < 56) {
             printf("-");
@@ -192,7 +217,7 @@ void displayBoard(game_t * game) {
     k = 0;
 
     for (i=0;i<3;i++){
-        printf("    ");
+        printf("       ");
         for (j=0;j<=64;j++){
             if (j % 8 == 0){
                 printf("|");
@@ -214,7 +239,7 @@ void displayBoard(game_t * game) {
 
 /* encore un peu de decoration */    
         
-    printf("    ");
+    printf("       ");
     printf("+");
     for (j = 1; j < 64; j++){
         printf("-");
@@ -254,10 +279,23 @@ void printScore(game_t * game) {
 
 void stateMachine() {
 
-    int move;
     char input;
     state_t state = INIT_STATE;
     game_t * game;
+    int i;
+
+    printf("\n\n");
+    printf("     "); for (i = 0; i < 69 ; i++) printf("*"); printf("\n");
+    printf("     *"); for (i = 0; i < 67 ; i++) printf(" "); printf("*\n");
+    printf("     *"); for (i = 0; i < 67 ; i++) printf(" "); printf("*\n");
+    printf("     *"); for (i = 0; i < 24 ; i++) printf(" "); 
+    printf("Welcome to Bantumi!");
+    for (i = 0; i < 24 ; i++) printf(" "); printf("*\n"); 
+    printf("     *"); for (i = 0; i < 67 ; i++) printf(" "); printf("*\n");
+    printf("     *"); for (i = 0; i < 67 ; i++) printf(" "); printf("*\n");
+    printf("     "); for (i = 0; i < 69 ; i++) printf("*"); printf("\n");
+    printf("\n\n");
+    
 
     while (state != EXIT_STATE) {
 
@@ -265,15 +303,21 @@ void stateMachine() {
 
             case INIT_STATE :
                 
+                printf("Make a selection:\n\n");
+                printf("(Q)uit the game\n");
+                printf("(P)lay\n\n");
+                printf("Your choice> ");
+
+
                 while ((input = getchar()) == '\n' || input == EOF);
  
                 switch(input) {
 
-                    case 'q':
+                    case 'Q':
                         state = EXIT_STATE;
                         break;
                     
-                    case 'p':
+                    case 'P':
                         state = PLAY_STATE;
                         break;
 
