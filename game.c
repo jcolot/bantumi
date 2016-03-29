@@ -1,26 +1,3 @@
-
-     *********************************************************************
-     *                                                                   *
-     *                                                                   *
-     *                        Welcome to Bantumi!                        *
-     *                                                                   *
-     *                                                                   *
-     *********************************************************************
-
-
-Make a selection:
-
-(Q)uit the game
-(P)lay
-
-Your choice> ^C
-julien@julien-ThinkPad-T420:~/Documents/Cours/bantumi$ vi bantumi.c
-julien@julien-ThinkPad-T420:~/Documents/Cours/bantumi$ vi game.c
-julien@julien-ThinkPad-T420:~/Documents/Cours/bantumi$ git commit
-Aborting commit due to empty commit message.
-julien@julien-ThinkPad-T420:~/Documents/Cours/bantumi$ git commit
-Aborting commit due to empty commit message.
-julien@julien-ThinkPad-T420:~/Documents/Cours/bantumi$ cat game.c
 #include <stdio.h>
 #include <stdlib.h>
 #include <strings.h>
