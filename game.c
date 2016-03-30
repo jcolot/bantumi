@@ -262,15 +262,13 @@ void stateMachine() {
     int i;
 
     printf("\n\n");
-    printf("     "); for (i = 0; i < 69 ; i++) printf("*"); printf("\n");
-    printf("     *"); for (i = 0; i < 67 ; i++) printf(" "); printf("*\n");
-    printf("     *"); for (i = 0; i < 67 ; i++) printf(" "); printf("*\n");
-    printf("     *"); for (i = 0; i < 24 ; i++) printf(" "); 
-    printf("Welcome to Bantumi!");
-    for (i = 0; i < 24 ; i++) printf(" "); printf("*\n"); 
-    printf("     *"); for (i = 0; i < 67 ; i++) printf(" "); printf("*\n");
-    printf("     *"); for (i = 0; i < 67 ; i++) printf(" "); printf("*\n");
-    printf("     "); for (i = 0; i < 69 ; i++) printf("*"); printf("\n");
+    printf("\n\
+     ______             _                   _ \n\
+     | ___ \           | |                 (_)\n\
+     | |_/ / __ _ _ __ | |_ _   _ _ __ ___  _ \n\
+     | ___ \/ _` | '_ \| __| | | | '_ ` _ \| |\n\
+     | |_/ / (_| | | | | |_| |_| | | | | | | |\n\
+     \____/ \__,_|_| |_|\__|\__,_|_| |_| |_|_|n\);
     printf("\n\n");
     
 
