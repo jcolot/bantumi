@@ -262,14 +262,6 @@ void stateMachine() {
     int i;
 
     printf("\n\n");
-    printf("\n\
-     ______             _                   _ \n\
-     | ___ \           | |                 (_)\n\
-     | |_/ / __ _ _ __ | |_ _   _ _ __ ___  _ \n\
-     | ___ \/ _` | '_ \| __| | | | '_ ` _ \| |\n\
-     | |_/ / (_| | | | | |_| |_| | | | | | | |\n\
-     \____/ \__,_|_| |_|\__|\__,_|_| |_| |_|_|n\);
-    printf("\n\n");
     
 
     while (state != EXIT_STATE) {
@@ -277,12 +269,23 @@ void stateMachine() {
         switch (state) {
 
             case INIT_STATE :
+
+                printf(
+            "     _______  _______  __    _  _______  __   __  __   __  ___ \n" 
+            "    |  _    ||   _   ||  |  | ||       ||  | |  ||  |_|  ||   |\n" 
+            "    | |_|  _||  |_|  ||   |_| ||_     _||  | |  ||       ||   |\n" 
+            "    |     |_ |       ||       |  |   |  |  | |  ||       ||   |\n" 
+            "    |  _    ||   _   ||  _    |  |   |  |  |_|  || || || ||   |\n" 
+            "    | |_|   ||  | |  || | |   |  |   |  |       || ||_|| ||   |\n" 
+            "    |_______||__| |__||_|  |__|  |___|  |_______||_|   |_||___|\n" 
+            "                                                               \n" 
+            "                                                               \n" 
+                );
                 
                 printf("Make a selection:\n\n");
                 printf("(Q)uit the game\n");
                 printf("(P)lay\n\n");
                 printf("Your choice> ");
-
 
                 while ((input = getchar()) == '\n' || input == EOF);
  
@@ -308,6 +311,7 @@ void stateMachine() {
                 * la fonction playGame, jusqu'a la fin de la partie
                 */ 
                 game = initGame();
+		displayBoard(game);
                 state = playGame(game);
                 break;
             
