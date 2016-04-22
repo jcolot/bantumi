@@ -24,7 +24,6 @@ game_t * initGame() {
     game->board[0][6] = 0;
     game->board[1][6] = 0;
     game->player = rand() % 2;
-    game->player = human;
     return game;
 }
 
