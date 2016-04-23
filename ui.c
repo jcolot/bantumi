@@ -1,3 +1,17 @@
+/************************************************
+
+   ui.c
+  -----
+  Contient les fonctions d'affichage et 
+  d'interaction avec l'utilisateur grace a une
+  machine a etats finis.
+
+  $Author: julien colot $
+
+  Copyleft
+
+************************************************/
+
 #include <stdio.h>
 #include <stdlib.h>
 #include <strings.h>
@@ -5,6 +19,14 @@
 #include "game.h"
 #include "ui.h"
 
+/*
+ *   Function:  displayBoard 
+ *   -----------------------
+ *   
+ *   Affiche le plateau dans son etat courant
+ *   Utilisee apres chaque coup
+ *
+ */
 
 void displayBoard(game_t * game) {
 
@@ -125,6 +147,14 @@ void displayError() {
     printf("Error");
 }
 
+/*
+ *   Function:  printScore 
+ *   ---------------------
+ *   
+ *   Affiche le score
+ *   Utilisee a la fin d'une partie
+ *
+ */
 
 void printScore(game_t * game) {
 
@@ -142,6 +172,14 @@ void printScore(game_t * game) {
 
     }
 }
+
+/*
+ *   Function:  stateMachine
+ *   -----------------------
+ *   
+ *   C'est la fonction qui assure les transitions d'etats
+ *
+ */
 
 void stateMachine() {
 
