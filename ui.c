@@ -3,15 +3,27 @@
 #include <strings.h>
 #include <time.h>
 #include "game.h"
+#include "ui.h"
+
 
 void displayBoard(game_t * game) {
 
-
-    int i,j,k;
+    int c,i,j,k;
     int * board;
     board = &(game->board[0][0]);
 
 /* Un peu de decoration */    
+
+    printf("\n");
+    printf("\n");
+
+    c = 'f'; 
+    printf("                ");
+    for (i = 0; i < 6; i++) {
+        printf("   %c    ", c);
+        c--;
+    }   
+    printf("\n");
         
     printf("       ");
     printf("+");
@@ -20,7 +32,7 @@ void displayBoard(game_t * game) {
     };
     printf("+");
     printf("\n");
-
+   
 /* Rangee de bols du joueur du haut (cpu) */    
     k = 14;
 
@@ -63,7 +75,6 @@ void displayBoard(game_t * game) {
     };
     printf("\n");
 
-
 /* rangee de bols du joueur du bas */    
     k = 0;
 
@@ -97,6 +108,17 @@ void displayBoard(game_t * game) {
     };
     printf("+");
     printf("\n");
+
+    c = 'A'; 
+    printf("                ");
+    for (i = 0; i < 6; i++) {
+        printf("   %c    ", c);
+        c++;
+    }
+   
+    printf("\n");
+    printf("\n");
+    printf("\n");
 }
 
 void displayError() {
@@ -105,8 +127,20 @@ void displayError() {
 
 
 void printScore(game_t * game) {
-    printf("Your score: %d\n", game->board[human][6]);
-    printf("Score of the computer: %d\n", game->board[computer][6]);
+
+    if (game->board[human][6] > game->board[computer][6]) {
+
+        printf("Your won: %d-%d\n\n", game->board[human][6], game->board[computer][6]);
+
+    } else if (game->board[human][6] < game->board[computer][6]) {
+
+        printf("You lost: %d-%d\n\n", game->board[human][6], game->board[computer][6]);
+
+    } else {
+
+        printf("Draw: %d-%d\n\n", game->board[computer][6], game->board[human][6]);
+
+    }
 }
 
 void stateMachine() {
@@ -114,29 +148,15 @@ void stateMachine() {
     char input;
     state_t state = INIT_STATE;
     game_t * game;
-    int i;
 
     printf("\n\n");
     
-
     while (state != EXIT_STATE) {
 
         switch (state) {
 
             case INIT_STATE :
-
-                printf(
-           "      ________  _______  __    _  _______  __   __  __   __  ___ \n" 
-           "     |   _    ||   _   ||  |  | ||       ||  | |  ||  |_|  ||   |\n" 
-           "     |  |_|  _||  |_|  ||   |_| ||_     _||  | |  ||       ||   |\n" 
-           "     |      |_ |       ||       |  |   |  |  | |  ||       ||   |\n" 
-           "     |   _    ||   _   ||  _    |  |   |  |  |_|  || || || ||   |\n" 
-           "     |  |_|   ||  | |  || | |   |  |   |  |       || ||_|| ||   |\n" 
-           "     |________||__| |__||_|  |__|  |___|  |_______||_|   |_||___|\n" 
-           "                                                                \n" 
-           "                                                                \n" 
-                );
-                
+               
                 printf("Make a selection:\n\n");
                 printf("(Q)uit the game\n");
                 printf("(P)lay\n\n");
@@ -166,14 +186,14 @@ void stateMachine() {
                 * la fonction playGame, jusqu'a la fin de la partie
                 */ 
                 game = initGame();
-		displayBoard(game);
+                displayBoard(game);
                 state = playGame(game);
                 break;
             
             case ENDGAME_STATE :
 
                 printScore(game);
-                printf("Do you want to play a new game?\n");
+                /* printf("Do you want to play a new game?\n");
                 do {scanf("%c", &input); } while (input == 32 || input == 9);
 
                 switch(input) {
@@ -188,7 +208,8 @@ void stateMachine() {
 
                     default:
                         displayError();
-                }
+                }*/
+                state = INIT_STATE;
                 break;
         }
     }

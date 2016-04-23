@@ -2,6 +2,7 @@
 #include <stdlib.h>
 #include <strings.h>
 #include <time.h>
+#include "ui.h"
 #include "game.h"
 
 
@@ -12,9 +13,12 @@ game_t * initGame() {
     game_t * game;
     game  = malloc(sizeof(game_t));
 
-    do { 
-        iniSeeds = rand() % 10; 
-    } while (iniSeeds < 4);
+
+/*   
+ *  choisi aleatoirement le nombre de graines entre 4 et 9 
+ */
+
+    iniSeeds = 1 + rand() % 6;
 
     for (i = 0; i < 14; i++) {
        (*game->board)[i] = iniSeeds;
@@ -23,7 +27,23 @@ game_t * initGame() {
    
     game->board[0][6] = 0;
     game->board[1][6] = 0;
+
+/*   
+ *  choisi aleatoirement le nombre de graines entre 4 et 9 
+ */
+
     game->player = rand() % 2;
+   
+    if (game->player == 0) {
+
+        printf("\nYou are playing first\n");        
+
+    } else {
+
+        printf("\nThe computer is playing first\n");        
+
+    }
+
     return game;
 }
 
@@ -32,11 +52,11 @@ state_t playGame(game_t * game) {
     short move;
     char input;
     
-    printf("Enter the coordinate of the bowl you want to play:\n\n");
-
     while (! isEndGame(game)) {
         
         if (game->player == human) {
+            
+            printf("Enter the coordinate of the bowl you want to play: ");
 
             while ((input = getchar()) == '\n' || input == EOF);
             
@@ -48,21 +68,37 @@ state_t playGame(game_t * game) {
 
             move = input - 'A';
 
-            if (move >= 0 && move <= 5) {
+            if (move >= 0 && move <= 5 && game->board[human][move] != 0) {
+
                 doMove(game, move);
                 displayBoard(game);
-            } else {
+
+            } else if (move < 0 || move > 5){
+
+                printf("\n");
                 printf("Error: please choose a value between 'A' and 'F'\n");
+                printf("\n");
+
+            } else if (game->board[human][move] == 0){
+
+                printf("\n");
+                printf("Error: the selected bowl is empty\n");
+                printf("\n");
+
             }
 
         } else {
+
             do {
+
                 move = rand() % 6;
-                printf("rand = %d\n", move);
+
             } while (game->board[computer][move] == 0);
-            
+           
+    	    printf("Computer played: %c\n", move + 'a'); 
             doMove(game, move);
             displayBoard(game);
+    
         }
     }
 
@@ -120,121 +156,14 @@ void doMove(game_t * game, int bowlNum) {
 }
 
 
-int main(){
-
-    srand(time(NULL));
-    stateMachine();
-    printf("Bye bye!\n");
-    exit(0);
-
-}
-
-void displayBoard(game_t * game) {
-
-
-    int i,j,k;
-    int * board;
-    board = &(game->board[0][0]);
-
-/* Un peu de decoration */    
-        
-    printf("       ");
-    printf("+");
-    for (j = 1; j < 64; j++){
-        printf("-");
-    };
-    printf("+");
-    printf("\n");
-
-/* Rangee de bols du joueur du haut (cpu) */    
-    k = 14;
-
-    for (i=0;i<3;i++){
-        printf("       ");
-        for (j=0;j<=64;j++){
-            if (j % 8 == 0){
-                printf("|");
-            } else {
-                if (((j+4)%8)==0 &&i==1){
-                    if (k>7&&k<14){
-                        printf("\b%2d", board[k-1]);
-                    } else {
-                        printf(" ");
-                    }
-                    k--;
-                } else {
-                    printf(" ");
-                } 
-            }        
-        }
-        printf("\n"); 
-    }
-    
-/* Les deux bols a la droite des joueurs (les scores) */
-
-    printf("       ");
-    for (j = 0; j <= 64; j++) {
-        if (j > 8 && j < 56) {
-            printf("-");
-        } else if (!(j % 8)) {
-            printf("+");
-        } else if (j == 4) {
-            printf("\b%2d", board[13]);
-        } else if (j == 60) {
-            printf("\b%2d", board[6]);
-        } else {
-            printf(" ");
-        }
-    };
-    printf("\n");
-
-
-/* rangee de bols du joueur du bas */    
-    k = 0;
-
-    for (i=0;i<3;i++){
-        printf("       ");
-        for (j=0;j<=64;j++){
-            if (j % 8 == 0){
-                printf("|");
-            } else {
-                if (((j+4)%8)==0 &&i==1){
-                    if (k>0&&k<7){
-                        printf("\b%2d", board[k-1]);
-                    } else {
-                        printf(" ");
-                    }
-                    k++;
-                } else {
-                    printf(" ");
-                } 
-            }        
-        }
-        printf("\n"); 
-    }
-
-/* encore un peu de decoration */    
-        
-    printf("       ");
-    printf("+");
-    for (j = 1; j < 64; j++){
-        printf("-");
-    };
-    printf("+");
-    printf("\n");
-}
-
-void displayError() {
-    printf("Error");
-}
-
 bool isEndGame(game_t * game) {
 
     short player;
     short bowlNum;
-    short emptyBowls = 0;
+    short emptyBowls;
 
     for (player = 0; player < 2; player++) {
+    	emptyBowls = 0;
         for (bowlNum = 0; bowlNum < 6; bowlNum++) {
             if (game->board[player][bowlNum] == 0) {
                 emptyBowls++;
@@ -248,94 +177,23 @@ bool isEndGame(game_t * game) {
     return false;
 }
 
-void printScore(game_t * game) {
-    printf("Your score: %d\n", game->board[human][6]);
-    printf("Score of the computer: %d\n", game->board[computer][6]);
-}
+int main(){
 
-void stateMachine() {
+     printf(
+     "      ________  _______  __    _  _______  __   __  __   __  ___ \n" 
+     "     |   _    ||   _   ||  |  | ||       ||  | |  ||  |_|  ||   |\n" 
+     "     |  |_|  _||  |_|  ||   |_| ||_     _||  | |  ||       ||   |\n" 
+     "     |      |_ |       ||       |  |   |  |  | |  ||       ||   |\n" 
+     "     |   _    ||   _   ||  _    |  |   |  |  |_|  || || || ||   |\n" 
+     "     |  |_|   ||  | |  || | |   |  |   |  |       || ||_|| ||   |\n" 
+     "     |________||__| |__||_|  |__|  |___|  |_______||_|   |_||___|\n" 
+     "                                                                 \n" 
+     "                                                                 \n" 
+     );
 
-    char input;
-    state_t state = INIT_STATE;
-    game_t * game;
-    int i;
+    srand(time(NULL));
+    stateMachine();
+    printf("\nBye bye!\n");
+    exit(0);
 
-    printf("\n\n");
-    
-
-    while (state != EXIT_STATE) {
-
-        switch (state) {
-
-            case INIT_STATE :
-
-                printf(
-            "     _______  _______  __    _  _______  __   __  __   __  ___ \n" 
-            "    |  _    ||   _   ||  |  | ||       ||  | |  ||  |_|  ||   |\n" 
-            "    | |_|  _||  |_|  ||   |_| ||_     _||  | |  ||       ||   |\n" 
-            "    |     |_ |       ||       |  |   |  |  | |  ||       ||   |\n" 
-            "    |  _    ||   _   ||  _    |  |   |  |  |_|  || || || ||   |\n" 
-            "    | |_|   ||  | |  || | |   |  |   |  |       || ||_|| ||   |\n" 
-            "    |_______||__| |__||_|  |__|  |___|  |_______||_|   |_||___|\n" 
-            "                                                               \n" 
-            "                                                               \n" 
-                );
-                
-                printf("Make a selection:\n\n");
-                printf("(Q)uit the game\n");
-                printf("(P)lay\n\n");
-                printf("Your choice> ");
-
-                while ((input = getchar()) == '\n' || input == EOF);
- 
-                switch(input) {
-
-                    case 'Q':
-                        state = EXIT_STATE;
-                        break;
-                    
-                    case 'P':
-                        state = PLAY_STATE;
-                        break;
-
-                    default:
-                        displayError();
-                }
-                
-                break;
-
-            case PLAY_STATE:
-               /*
-                * On delegue la gestion du jeu a 
-                * la fonction playGame, jusqu'a la fin de la partie
-                */ 
-                game = initGame();
-		displayBoard(game);
-                state = playGame(game);
-                break;
-            
-            case ENDGAME_STATE :
-
-                printScore(game);
-                printf("Do you want to play a new game?\n");
-                do {scanf("%c", &input); } while (input == 32 || input == 9);
-
-                switch(input) {
-
-                    case 'q':
-                        state = EXIT_STATE;
-                        break;
-                    
-                    case 'p':
-                        state = INIT_STATE;
-                        break;
-
-                    default:
-                        displayError();
-                }
-                break;
-        }
-    }
-
-    /* Quitte la fonction, et le jeu */
 }

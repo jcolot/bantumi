@@ -1,14 +1,11 @@
 CC=gcc
 
-CFLAGS=-c -Wall
+CFLAGS=-std=c99 -Wall
 
 all: bantumi
 
-bantumi: game.o
-	$(CC) game.o -o bantumi
-
-game.o: game.c
-	$(CC) $(CFLAGS) game.c
+bantumi: 
+	$(CC) game.c ui.c -o bantumi
 
 clean: 
-	rm *o game
+	rm bantumi 
