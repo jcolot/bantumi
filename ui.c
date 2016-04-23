@@ -196,8 +196,8 @@ void stateMachine() {
             case INIT_STATE :
                
                 printf("Make a selection:\n\n");
-                printf("(Q)uit the game\n");
-                printf("(P)lay\n\n");
+                printf("(P)lay\n");
+                printf("(Q)uit the game\n\n");
                 printf("Your choice> ");
 
                 while ((input = getchar()) == '\n' || input == EOF);

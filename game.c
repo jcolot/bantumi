@@ -18,6 +18,13 @@
 #include "ui.h"
 #include "game.h"
 
+/*
+ *   Function: initGame  
+ *   -----------------------
+ *  
+ *   Prepare le plateau avec un nombre de graine choisi au hasard 
+ *
+ */
 
 game_t * initGame() {
 
@@ -26,9 +33,8 @@ game_t * initGame() {
     game_t * game;
     game  = malloc(sizeof(game_t));
 
-
 /*   
- *  choisi aleatoirement le nombre de graines entre 4 et 9 
+ *  choisi aleatoirement le nombre de graines entre 1 et 6 
  */
 
     iniSeeds = 1 + rand() % 6;
@@ -40,10 +46,6 @@ game_t * initGame() {
    
     game->board[0][6] = 0;
     game->board[1][6] = 0;
-
-/*   
- *  choisi aleatoirement le nombre de graines entre 4 et 9 
- */
 
     game->player = rand() % 2;
    
@@ -59,6 +61,16 @@ game_t * initGame() {
 
     return game;
 }
+
+/*
+ *   Function: playGame  
+ *   -----------------------
+ *   
+ *   Boucle principale du jeu qui gere les coups du joueur machine, 
+ *   et les choix de coup du joueur humain
+ *
+ *
+ */
 
 state_t playGame(game_t * game) {
 
@@ -103,7 +115,13 @@ state_t playGame(game_t * game) {
         } else {
 
             do {
-
+/*   
+ *  On choisi aleatoirement le coup du joueur machine
+ *
+ *  Dans la troisieme partie du projet, 
+ *  on deleguera la strategie a partir d'ici
+ *
+ */
                 move = rand() % 6;
 
             } while (game->board[computer][move] == 0);
@@ -118,6 +136,14 @@ state_t playGame(game_t * game) {
     return ENDGAME_STATE;
 
 }
+
+/*
+ *   Function: doMove  
+ *   ------------------
+ *
+ *   Effectue un coup suivant les regles du jeu
+ *
+ */
 
 void doMove(game_t * game, int bowlNum) {
 
@@ -168,6 +194,13 @@ void doMove(game_t * game, int bowlNum) {
     }
 }
 
+/*
+ *   Function: isEndGame  
+ *   -------------------
+ *
+ *   Detecte la fin de la partie
+ *
+ */
 
 bool isEndGame(game_t * game) {
 
