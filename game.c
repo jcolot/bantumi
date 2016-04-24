@@ -3,7 +3,8 @@
   game.c
   ------
 
-  Contient les regles du jeu
+  Contient les fonctions qui implementent les
+  regles du jeu
 
   $Author: julien colot $
 
@@ -15,14 +16,15 @@
 #include <stdlib.h>
 #include <strings.h>
 #include <time.h>
-#include "ui.h"
+#include <ctype.h>
 #include "game.h"
 
 /*
- *   Function: initGame  
+ *   Fonction: initGame  
  *   -----------------------
  *  
  *   Prepare le plateau avec un nombre de graine choisi au hasard 
+ *   Choisit qui joue en premier
  *
  */
 
@@ -48,6 +50,11 @@ game_t * initGame() {
     game->board[1][6] = 0;
 
     game->player = rand() % 2;
+
+/*   
+ *  choisi aleatoirement le premier joueur
+ */
+
    
     if (game->player == 0) {
 
@@ -63,7 +70,7 @@ game_t * initGame() {
 }
 
 /*
- *   Function: playGame  
+ *   Fonction: playGame  
  *   -----------------------
  *   
  *   Boucle principale du jeu qui gere les coups du joueur machine, 
@@ -75,46 +82,62 @@ game_t * initGame() {
 state_t playGame(game_t * game) {
 
     short move;
-    char input;
-    
+    char input[80];
+    int i;
+    char c;
+
     while (! isEndGame(game)) {
         
         if (game->player == human) {
             
-            printf("Enter the coordinate of the bowl you want to play: ");
-
-            while ((input = getchar()) == '\n' || input == EOF);
+            printf("Enter the coordinate of the bowl you want to play (");
             
-            if (input == 'q') {
+            for (i = 0; i < 6; i++) {
+                c = 'A' + i;
+                if (game->board[human][i] != 0) {
+                    printf("%c-", c);
+                }    
+            }
+            
+            printf("\b): ");
+
+/*
+ * On protege l'input d'un overflow
+ *
+ */
+
+            if (fgets(input, 80, stdin) == NULL) {
+                return FAILURE_STATE;
+            }
+
+/*
+ * Q permet de quitter en cours de partie en evitant un Ctrl-c
+ *
+ */
+            
+            if (toupper(input[0]) == 'Q') {
 
                 return EXIT_STATE;
 
             }
 
-            move = input - 'A';
+            move = input[0] - 'A';
 
             if (move >= 0 && move <= 5 && game->board[human][move] != 0) {
 
                 doMove(game, move);
                 displayBoard(game);
 
-            } else if (move < 0 || move > 5){
-
+                
+            } else {
+                
                 printf("\n");
-                printf("Error: please choose a value between 'A' and 'F'\n");
+                printf("Error: '%c' is not a valid entry\n", input[0]);
                 printf("\n");
-
-            } else if (game->board[human][move] == 0){
-
-                printf("\n");
-                printf("Error: the selected bowl is empty\n");
-                printf("\n");
-
             }
-
+ 
         } else {
 
-            do {
 /*   
  *  On choisi aleatoirement le coup du joueur machine
  *
@@ -122,11 +145,13 @@ state_t playGame(game_t * game) {
  *  on deleguera la strategie a partir d'ici
  *
  */
+            do {
+
                 move = rand() % 6;
 
             } while (game->board[computer][move] == 0);
            
-    	    printf("Computer played: %c\n", move + 'a'); 
+    	    printf("Computer plays %c:\n", move + 'a'); 
             doMove(game, move);
             displayBoard(game);
     
@@ -134,11 +159,10 @@ state_t playGame(game_t * game) {
     }
 
     return ENDGAME_STATE;
-
 }
 
 /*
- *   Function: doMove  
+ *   Fonction: doMove  
  *   ------------------
  *
  *   Effectue un coup suivant les regles du jeu
@@ -195,7 +219,7 @@ void doMove(game_t * game, int bowlNum) {
 }
 
 /*
- *   Function: isEndGame  
+ *   Fonction: isEndGame  
  *   -------------------
  *
  *   Detecte la fin de la partie

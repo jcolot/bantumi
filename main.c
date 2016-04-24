@@ -1,7 +1,7 @@
 /************************************************
 
    main.c
-  -----
+   ------
 
   $Author: julien colot $
 
@@ -13,7 +13,7 @@
 #include <stdlib.h>
 #include <strings.h>
 #include <time.h>
-#include "game.h"
+#include "ui.h" 
 
 int main(){
 

@@ -15,12 +15,13 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <strings.h>
+#include <ctype.h>
 #include <time.h>
 #include "game.h"
 #include "ui.h"
 
 /*
- *   Function:  displayBoard 
+ *   Fonction:  displayBoard 
  *   -----------------------
  *   
  *   Affiche le plateau dans son etat courant
@@ -40,14 +41,14 @@ void displayBoard(game_t * game) {
     printf("\n");
 
     c = 'f'; 
-    printf("                ");
+    printf("             ");
     for (i = 0; i < 6; i++) {
         printf("   %c    ", c);
         c--;
     }   
     printf("\n");
         
-    printf("       ");
+    printf("    ");
     printf("+");
     for (j = 1; j < 64; j++){
         printf("-");
@@ -57,9 +58,8 @@ void displayBoard(game_t * game) {
    
 /* Rangee de bols du joueur du haut (cpu) */    
     k = 14;
-
     for (i=0;i<3;i++){
-        printf("       ");
+        printf("    ");
         for (j=0;j<=64;j++){
             if (j % 8 == 0){
                 printf("|");
@@ -81,7 +81,7 @@ void displayBoard(game_t * game) {
     
 /* Les deux bols a la droite des joueurs (les scores) */
 
-    printf("       ");
+    printf("    ");
     for (j = 0; j <= 64; j++) {
         if (j > 8 && j < 56) {
             printf("-");
@@ -99,9 +99,8 @@ void displayBoard(game_t * game) {
 
 /* rangee de bols du joueur du bas */    
     k = 0;
-
     for (i=0;i<3;i++){
-        printf("       ");
+        printf("    ");
         for (j=0;j<=64;j++){
             if (j % 8 == 0){
                 printf("|");
@@ -123,7 +122,7 @@ void displayBoard(game_t * game) {
 
 /* encore un peu de decoration */    
         
-    printf("       ");
+    printf("    ");
     printf("+");
     for (j = 1; j < 64; j++){
         printf("-");
@@ -132,7 +131,7 @@ void displayBoard(game_t * game) {
     printf("\n");
 
     c = 'A'; 
-    printf("                ");
+    printf("             ");
     for (i = 0; i < 6; i++) {
         printf("   %c    ", c);
         c++;
@@ -143,12 +142,8 @@ void displayBoard(game_t * game) {
     printf("\n");
 }
 
-void displayError() {
-    printf("Error");
-}
-
 /*
- *   Function:  printScore 
+ *   Fonction:  printScore 
  *   ---------------------
  *   
  *   Affiche le score
@@ -158,12 +153,14 @@ void displayError() {
 
 void printScore(game_t * game) {
 
+
     if (game->board[human][6] > game->board[computer][6]) {
 
         printf("Your won: %d-%d\n\n", game->board[human][6], game->board[computer][6]);
 
     } else if (game->board[human][6] < game->board[computer][6]) {
 
+        printf("Game over!\n\n");
         printf("You lost: %d-%d\n\n", game->board[human][6], game->board[computer][6]);
 
     } else {
@@ -174,16 +171,17 @@ void printScore(game_t * game) {
 }
 
 /*
- *   Function:  stateMachine
+ *   Fonction:  stateMachine
  *   -----------------------
  *   
- *   C'est la fonction qui assure les transitions d'etats
+ *   C'est la fonction qui implemente la machine a etat
+ *   et assure les transitions d'etats
  *
  */
 
 void stateMachine() {
 
-    char input;
+    char input[80];
     state_t state = INIT_STATE;
     game_t * game;
 
@@ -200,9 +198,11 @@ void stateMachine() {
                 printf("(Q)uit the game\n\n");
                 printf("Your choice> ");
 
-                while ((input = getchar()) == '\n' || input == EOF);
- 
-                switch(input) {
+                if (fgets(input, 80, stdin) == NULL) {
+                    state = FAILURE_STATE;
+                }
+
+                switch(toupper(input[0])) {
 
                     case 'Q':
                         state = EXIT_STATE;
@@ -213,7 +213,7 @@ void stateMachine() {
                         break;
 
                     default:
-                        displayError();
+                        printf("\nError: entry '%c' is not valid\n\n", input[0]);
                 }
                 
                 break;
@@ -227,30 +227,28 @@ void stateMachine() {
                 displayBoard(game);
                 state = playGame(game);
                 break;
-            
+
+            case FAILURE_STATE :
+
+                fprintf(stderr, "There was an unknow technical issue...");
+                state = EXIT_STATE;
+                break;
+ 
             case ENDGAME_STATE :
 
                 printScore(game);
-                /* printf("Do you want to play a new game?\n");
-                do {scanf("%c", &input); } while (input == 32 || input == 9);
-
-                switch(input) {
-
-                    case 'q':
-                        state = EXIT_STATE;
-                        break;
-                    
-                    case 'p':
-                        state = INIT_STATE;
-                        break;
-
-                    default:
-                        displayError();
-                }*/
                 state = INIT_STATE;
+                break;
+
+            case EXIT_STATE :
+
+               /*
+                * En fait, ce case n'est present que pour eviter un warning 
+                * avec -Wswitch
+                */ 
+
+                state = EXIT_STATE;
                 break;
         }
     }
-
-    /* Quitte la fonction, et le jeu */
 };

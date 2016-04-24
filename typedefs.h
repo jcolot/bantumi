@@ -11,8 +11,7 @@ typedef enum {
         INIT_STATE,
         PLAY_STATE,
         ENDGAME_STATE,
-        /* CONFIG_STATE, pour plus tard */
-        /* ERROR_STATE,  */
+        FAILURE_STATE,
         EXIT_STATE
 } state_t;
 #endif
