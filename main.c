@@ -31,6 +31,6 @@ int main(){
 
     srand(time(NULL));
     stateMachine();
-    printf("\nBye bye!\n");
+    printf("\nBye bye!\n\n");
     exit(0);
 }
