@@ -57,6 +57,7 @@ void displayBoard(game_t * game) {
     printf("\n");
    
 /* Rangee de bols du joueur du haut (cpu) */    
+
     k = 14;
     for (i=0;i<3;i++){
         printf("    ");
@@ -79,7 +80,9 @@ void displayBoard(game_t * game) {
         printf("\n"); 
     }
     
-/* Les deux bols a la droite des joueurs (les scores) */
+/* 
+ * Les deux bols a la droite des joueurs (les scores) 
+ */
 
     printf("    ");
     for (j = 0; j <= 64; j++) {
@@ -97,7 +100,10 @@ void displayBoard(game_t * game) {
     };
     printf("\n");
 
-/* rangee de bols du joueur du bas */    
+/* 
+ * rangee de bols du joueur du bas 
+ */
+    
     k = 0;
     for (i=0;i<3;i++){
         printf("    ");
@@ -120,7 +126,9 @@ void displayBoard(game_t * game) {
         printf("\n"); 
     }
 
-/* encore un peu de decoration */    
+/* 
+ * encore un peu de decoration 
+ */    
         
     printf("    ");
     printf("+");
@@ -191,7 +199,11 @@ void stateMachine() {
 
         switch (state) {
 
-            case INIT_STATE :
+            case INIT_STATE:
+
+/*
+ * Initialisation du jeu
+ */
                
                 printf("Make a selection:\n\n");
                 printf("(P)lay\n");
@@ -219,33 +231,37 @@ void stateMachine() {
                 break;
 
             case PLAY_STATE:
-               /*
-                * On delegue la gestion du jeu a 
-                * la fonction playGame, jusqu'a la fin de la partie
-                */ 
+/*
+ * On delegue la gestion du jeu a 
+ * la fonction playGame, jusqu'a la fin de la partie
+ */ 
                 game = initGame();
                 displayBoard(game);
                 state = playGame(game);
                 break;
 
             case FAILURE_STATE :
-
-                fprintf(stderr, "There was an unknow technical issue...");
+/*
+ * Juste au cas ou, en cas de probleme avec fgets
+ */ 
+                fprintf(stderr, "There was an unknown technical issue...");
                 state = EXIT_STATE;
                 break;
  
             case ENDGAME_STATE :
-
+/*
+ * En fin de partie
+ */ 
                 printScore(game);
                 state = INIT_STATE;
                 break;
 
             case EXIT_STATE :
 
-               /*
-                * En fait, ce case n'est present que pour eviter un warning 
-                * avec -Wswitch
-                */ 
+/*
+ * En fait, ce case n'est pas utilise en pratique, 
+ * et n'est present que pour eviter un warning avec -Wswitch
+ */ 
 
                 state = EXIT_STATE;
                 break;

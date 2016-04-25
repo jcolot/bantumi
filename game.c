@@ -45,6 +45,10 @@ game_t * initGame() {
        (*game->board)[i] = iniSeeds;
     }
 
+
+/*
+ * affecte les scores a 0
+ */
    
     game->board[0][6] = 0;
     game->board[1][6] = 0;
@@ -55,7 +59,6 @@ game_t * initGame() {
  *  choisi aleatoirement le premier joueur
  */
 
-   
     if (game->player == 0) {
 
         printf("\nYou are playing first\n");        
@@ -65,6 +68,10 @@ game_t * initGame() {
         printf("\nThe computer is playing first\n");        
 
     }
+
+/*
+ * retourne la structure decrivant le jeu
+ */
 
     return game;
 }
@@ -86,12 +93,18 @@ state_t playGame(game_t * game) {
     int i;
     char c;
 
+/*
+ * On boucle tant que le jeu n'est pas fini
+ *
+ */
+
     while (! isEndGame(game)) {
-        
         if (game->player == human) {
-            
             printf("Enter the coordinate of the bowl you want to play (");
-            
+/* 
+ * On affiche les coups possibles au joueur
+ */
+          
             for (i = 0; i < 6; i++) {
                 c = 'A' + i;
                 if (game->board[human][i] != 0) {
@@ -103,7 +116,6 @@ state_t playGame(game_t * game) {
 
 /*
  * On protege l'input d'un overflow
- *
  */
 
             if (fgets(input, 80, stdin) == NULL) {
@@ -116,26 +128,22 @@ state_t playGame(game_t * game) {
  */
             
             if (toupper(input[0]) == 'Q') {
-
                 return EXIT_STATE;
-
             }
 
+/*
+ * On transforme la lettre du coup en nombre
+ */
             move = input[0] - 'A';
 
             if (move >= 0 && move <= 5 && game->board[human][move] != 0) {
-
                 doMove(game, move);
-                displayBoard(game);
-
-                
+                displayBoard(game);   
             } else {
-                
                 printf("\n");
                 printf("Error: '%c' is not a valid entry\n", input[0]);
                 printf("\n");
             }
- 
         } else {
 
 /*   
@@ -180,7 +188,15 @@ void doMove(game_t * game, int bowlNum) {
     int lastBowlOwner = (((bowlNum + seeds) % 14 < 6))?player:opponent;
     int seedsInLastBowl = game->board[lastBowlOwner][lastBowlNum];
 
+/*
+ * Premierement on vide le bol joue (sa valeur est sauvee dans la variable seeds)
+ */
+
     game->board[player][bowlNum] = 0;
+
+/*
+ * On incremente chacun des bols suivant jusqu'a epuisement de seeds
+ */
 
     for (i = 1; i <= seeds; i++){
         (*game->board)[(bowlNum + offset + i) % 14] ++;
@@ -188,21 +204,21 @@ void doMove(game_t * game, int bowlNum) {
 
 
 /*   
- *  si le dernier grain tombe du meme cote
+ *  Si le dernier grain tombe du meme cote
  *  et que le dernier bol incremente etait vide...       
  */
 
     if (lastBowlNum < 6 && lastBowlOwner == player && seedsInLastBowl == 0) {
         
 /* 
- *      on ajoute le bol d'en face au score... 			
+ *  on ajoute le bol d'en face au score... 			
  */
 
         game->board[player][6] += game->board[opponent][5 - lastBowlNum];
     	game->board[opponent][5 - lastBowlNum] = 0;
 
 /*        
- *      on ajoute le dernier bol au score et on vide ce bol 
+ *  on ajoute le dernier bol au score et on vide ce bol 
  */
         game->board[player][6]++;	
         game->board[player][lastBowlNum] = 0;
@@ -231,6 +247,11 @@ bool isEndGame(game_t * game) {
     short player;
     short bowlNum;
     short emptyBowls;
+
+/*
+ * Si 6 les bols sont vides d'un des deux cotes, 
+ * c'est la fin de la partie
+ */
 
     for (player = 0; player < 2; player++) {
     	emptyBowls = 0;
