@@ -18,6 +18,7 @@
 #include <time.h>
 #include <ctype.h>
 #include "game.h"
+#include "strategy.h"
 
 /*
  *   Fonction: initGame  
@@ -128,6 +129,7 @@ state_t playGame(game_t * game) {
  */
             
             if (toupper(input[0]) == 'Q') {
+                free(game);
                 return EXIT_STATE;
             }
 
@@ -148,7 +150,6 @@ state_t playGame(game_t * game) {
 
 /*   
  *  On choisi aleatoirement le coup du joueur machine
- *
  *  Dans la troisieme partie du projet, 
  *  on deleguera la strategie a partir d'ici
  *
@@ -158,7 +159,9 @@ state_t playGame(game_t * game) {
                 move = rand() % 6;
 
             } while (game->board[computer][move] == 0);
-           
+            
+            move = getBestMove(game); 
+          
     	    printf("Computer plays %c:\n", move + 'a'); 
             doMove(game, move);
             displayBoard(game);
@@ -201,7 +204,6 @@ void doMove(game_t * game, int bowlNum) {
     for (i = 1; i <= seeds; i++){
         (*game->board)[(bowlNum + offset + i) % 14] ++;
     }
-
 
 /*   
  *  Si le dernier grain tombe du meme cote

@@ -253,6 +253,7 @@ void stateMachine() {
  * En fin de partie
  */ 
                 printScore(game);
+                free(game);
                 state = INIT_STATE;
                 break;
 

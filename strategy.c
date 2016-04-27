@@ -1,101 +1,203 @@
+/************************************************
+
+   main.c
+   ------
+
+  $Author: julien colot $
+
+  Copyleft
+
+************************************************/
 
 #include <stdlib.h>
 #include <stdio.h>
+#include <string.h>
+#include <limits.h>
 #include "typedefs.h"
-#include "ui.h"
+#include "game.h"
+#include "strategy.h"
 
+#define DEPTH 15
 
 
 /*
- * Calcule le meilleur score qu'on peut attendre d'un coup a une profondeur
+ * Calcule le meilleur resultat qu'on peut attendre d'un coup a une profondeur
  * d'arbre donnee
  */
 
-score_t getBestScore(short move, short depth) {
+int getBestWorstValueOld(game_t * game, int move, int depth) {
 
-    short move;
-    short player;
-    short depth;
-    int  ret;
-    int  tmp;
-
+    int value;
+    int tmp;
+    int minimax;
+    player_t player;
     
     game_t * gamecpy;
-    gamecpy  = malloc(sizeof(game_t));
+    gamecpy = malloc(sizeof(game_t));
 
-    memcpy(game, gamecpy, sizeof(game_t));
-   
-    player = gamecpy->player;
-    doMove(move);
-    nextPlayer = gamecpy->player;
-
-    if (!depth) {
-	/*
-	 *  
-	 *  the board with no more checking of moves.
-	 */
-        free(gamecpy);
-	return = game->board[player][6];
-    }
-    
-    if (endGame(gamecpy)) {
-	/*
-	 *  No more moves for the next player. Just evaluate the board.
-	 */
-	ret = evalBoard(player);
-	return = game->board[player][6];
-    }
-
-    /*
-     *  Check all following moves, and choose the one maximizing
-     *  the score for the player in question.
-     */
-    ret = -INT_MAX;
-    for (move = 0; move < 6; move++) {
-        
-	tmp = getBestMove(nextPlayer, move, depth - 1);
-	if (tmp > ret) {
-	    ret = tmp;
-	}
-    }
-    if (player != nextPlayer)
-	ret = -ret;
-}
+    memcpy(gamecpy, game, sizeof(game_t));
+    player = game->player;
 
 /*
- * Calcule le meilleur coup
- * en comparant les meilleurs scores
+ * Si le player est 'human'    (1) on met le facteur minimax a -1 (recherche de minima)
+ * si le player est 'computer' (0) on met le facteur minimax a +1 (recherche du maxima)
+ */
+    minimax = player?1:-1; 
+    value = -INT_MAX;
+    doMove(gamecpy, move);
+
+    if (isEndGame(gamecpy)) {
+/*
+ *  Fin de partie, on retourne le value
+ */
+        value = evalBoard(gamecpy);
+        free(gamecpy);
+	    return  value;
+    }
+
+    if (!depth) {
+        value = evalBoard(gamecpy);
+        free(gamecpy);
+	    return  value;
+    }
+    
+/*
+ * La boucle principale
+ */
+
+    for (move = 0; move < 6; move++) {
+/*
+ * On ne tient pas compte des coups non-legaux
+ */
+        
+        if (game->board[player][move] > 0) {
+/*
+ * Si le joueur courant est computer, on cherche le max
+ * sinon on cherche le min en changeant le signe du value
+ * Le plus grand nombre d'un ensemble devient le plus petit si on change
+ * les signes
  *
  */
 
-move_t getBestMove(game_t * game) {
-    int   q;              /* a counter variable */
-    PMove *move;          /* array of pointerts to possible moves to make */
-    int   numMoves;       /* number of moves in this array */
-    PMove bestMove;       /* the best move so far */
-    Score v;              /* value for a single move */
-    Score bestValue;      /* the value of the best move so far */
+	        tmp = getBestWorstValueOld(gamecpy, move, depth - 1) * minimax;       
+            if (tmp > value) value = tmp;
+        }
+    }
 
+    value = value * minimax;
+    free(gamecpy);
+    return value;
+}
+
+
+int getBestWorstValue(game_t * game, int move, int depth, int alpha, int beta) {
+
+    int value;
+    int tmp;
+    player_t player;
     
-    /*
-     *  Now loop through all possible moves for the given player,
-     *  and find the one with the highest score according to the
-     *  minimax algorithm. If there are no possible moves left,
-     *  we return NULL.
-     */
-     
-    bestMove = NULL;
-    move = getMoves(player, &numMoves);
-    bestValue = -INF_SCORE;
+    game_t * gamecpy;
+
+    gamecpy = malloc(sizeof(game_t));
+    memcpy(gamecpy, game, sizeof(game_t));
+   
+    player = game->player;
+
+    doMove(gamecpy, move);
+
+    if (isEndGame(gamecpy)) {
+/*
+ *  Fin de partie, on retourne le value
+ */
+        value = evalBoard(gamecpy);
+        free(gamecpy);
+	    return  value;
+    }
+
+    if (!depth) {
+        value = evalBoard(gamecpy);
+        free(gamecpy);
+	    return  value;
+    }
+    
+/*
+ * La boucle principale
+ * Si le joueur courant est computer, on cherche le max
+ * sinon on cherche le min en changeant le signe du value
+ * Le plus grand nombre d'un ensemble devient le plus petit si on change
+ * les signes
+ *
+ */
+
+    if (player == computer) {
+/*
+ * On ne tient pas compte des coups non-legaux
+ */
+        value = -INT_MAX;
+        for (move = 0; move < 6; move++) {
+       
+            if (game->board[player][move] > 0) {
+
+	            tmp = getBestWorstValue(gamecpy, move, depth - 1, alpha, beta);
+                if (tmp > value) value = tmp;
+                if (value > alpha) alpha = value;
+                if (beta <= alpha) break;
+            }
+        }
+
+        
+    } else {
+        value = INT_MAX;
+        for (move = 0; move < 6; move++) {
+       
+            if (game->board[player][move] > 0) {
+
+	            tmp = getBestWorstValue(gamecpy, move, depth - 1, alpha, beta);
+                if (tmp < value) value = tmp;
+                if (value < beta) beta = value;
+                if (beta <= alpha) break;
+            }
+        }
+    }
+
+    free(gamecpy);
+    return value;
+}
+
+
+/*
+ * Calcule le meilleur coup
+ * en comparant les meilleurs values
+ *
+ */
+
+int getBestMove(game_t * game) {
+    int bestMove;
+    int bestValue;
+    int player;
+    int move;
+    int tmp;
+
+    player = game->player;
+    bestMove = -1;
+    bestValue = -INT_MAX;
+
     for (move = 0; move < 6; move++) {
-	v = getBestScore(player, *move, maxPly - 1);
+        if (game->board[player][move] != 0) {
+/*
+ *  Coup non legal
+ */
+	        tmp = getBestWorstValue(game, move, DEPTH, -INT_MAX, INT_MAX);
 
-	if (v >= bestValue) {
-
-	    bestValue = v;
-	    bestMove = *move;
-	}
-	++move;
+            if (tmp >= bestValue) {
+                bestValue = tmp;
+                bestMove = move;
+	        }
+        }
     }
     return bestMove;
+}
+
+int evalBoard(game_t * game) {
+    return game->board[computer][6] - game->board[human][6];
 }
