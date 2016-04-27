@@ -1,0 +1,5 @@
+\contentsline {section}{Introduction}{3}
+\contentsline {section}{Choix des structures de donn\'{e}es et conventions de repr\'esentation}{3}
+\contentsline {section}{D\'efinition des \'ecrans}{4}
+\contentsline {section}{D\'ecoupe du probl\`eme en sous probl\`emes}{5}
+\contentsline {section}{Conclusion}{6}
