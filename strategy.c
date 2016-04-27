@@ -41,7 +41,6 @@ int getBestWorstValue(game_t * game, int move, int depth, int alpha, int beta) {
     memcpy(gamecpy, game, sizeof(game_t));
    
     player = game->player;
-
     doMove(gamecpy, move);
 
     if (isEndGame(gamecpy)) {
@@ -99,7 +98,6 @@ int getBestWorstValue(game_t * game, int move, int depth, int alpha, int beta) {
     free(gamecpy);
     return value;
 }
-
 
 /*
  * Calcule le meilleur coup
