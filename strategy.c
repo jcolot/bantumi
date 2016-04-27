@@ -24,77 +24,9 @@
 #define DEPTH 14
 
 /*
- * Calcule le meilleur resultat qu'on peut attendre d'un coup a une profondeur
- * d'arbre donnee
- */
-
-int getBestWorstValueOld(game_t * game, int move, int depth) {
-
-    int value;
-    int tmp;
-    int minimax;
-    player_t player;
-    
-    game_t * gamecpy;
-    gamecpy = malloc(sizeof(game_t));
-
-    memcpy(gamecpy, game, sizeof(game_t));
-    player = game->player;
-
-/*
- * Si le player est 'human'    (1) on met le facteur minimax a -1 (recherche de minima)
- * si le player est 'computer' (0) on met le facteur minimax a +1 (recherche du maxima)
- */
-    minimax = player?1:-1; 
-    value = -INT_MAX;
-    doMove(gamecpy, move);
-
-    if (isEndGame(gamecpy)) {
-/*
- *  Fin de partie, on retourne le value
- */
-        value = evalBoard(gamecpy);
-        free(gamecpy);
-	    return  value;
-    }
-
-    if (!depth) {
-        value = evalBoard(gamecpy);
-        free(gamecpy);
-	    return  value;
-    }
-    
-/*
- * La boucle principale
- */
-
-    for (move = 0; move < 6; move++) {
-/*
- * On ne tient pas compte des coups non-legaux
- */
-        
-        if (game->board[player][move] > 0) {
-/*
- * Si le joueur courant est computer, on cherche le max
- * sinon on cherche le min en changeant le signe du value
- * Le plus grand nombre d'un ensemble devient le plus petit si on change
- * les signes
- *
- */
-
-	        tmp = getBestWorstValueOld(gamecpy, move, depth - 1) * minimax;       
-            if (tmp > value) value = tmp;
-        }
-    }
-
-    value = value * minimax;
-    free(gamecpy);
-    return value;
-}
-
-/*
  * Calcule le meilleur resultat qu'on est assure 
  * d'obtenir dans le "worst case scenario"
+ * a une profondeur d'arbre donnee (depth)
  */
 
 int getBestWorstValue(game_t * game, int move, int depth, int alpha, int beta) {
@@ -137,12 +69,11 @@ int getBestWorstValue(game_t * game, int move, int depth, int alpha, int beta) {
  */
 
     if (player == computer) {
-/*
- * On ne tient pas compte des coups non-legaux
- */
         value = -INT_MAX;
         for (move = 0; move < 6; move++) {
-       
+ /*
+ * On ne tient pas compte des coups non-legaux
+ */      
             if (game->board[player][move] > 0) {
 
 	        tmp = getBestWorstValue(gamecpy, move, depth - 1, alpha, beta);
@@ -172,8 +103,7 @@ int getBestWorstValue(game_t * game, int move, int depth, int alpha, int beta) {
 
 /*
  * Calcule le meilleur coup
- * en comparant les meilleurs values
- *
+ * en comparant les meilleurs value
  */
 
 int getBestMove(game_t * game) {
