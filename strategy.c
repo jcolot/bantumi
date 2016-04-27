@@ -1,7 +1,7 @@
 /************************************************
 
-   main.c
-   ------
+   strategy.c
+   ----------
 
   $Author: julien colot $
 
@@ -17,8 +17,11 @@
 #include "game.h"
 #include "strategy.h"
 
-#define DEPTH 15
 
+/* 
+ * Definit jusqu'a quel profondeur d'arbre chercher
+ */
+#define DEPTH 14
 
 /*
  * Calcule le meilleur resultat qu'on peut attendre d'un coup a une profondeur
@@ -89,6 +92,10 @@ int getBestWorstValueOld(game_t * game, int move, int depth) {
     return value;
 }
 
+/*
+ * Calcule le meilleur resultat qu'on est assure 
+ * d'obtenir dans le "worst case scenario"
+ */
 
 int getBestWorstValue(game_t * game, int move, int depth, int alpha, int beta) {
 
@@ -138,21 +145,19 @@ int getBestWorstValue(game_t * game, int move, int depth, int alpha, int beta) {
        
             if (game->board[player][move] > 0) {
 
-	            tmp = getBestWorstValue(gamecpy, move, depth - 1, alpha, beta);
+	        tmp = getBestWorstValue(gamecpy, move, depth - 1, alpha, beta);
                 if (tmp > value) value = tmp;
                 if (value > alpha) alpha = value;
                 if (beta <= alpha) break;
             }
         }
-
-        
     } else {
         value = INT_MAX;
         for (move = 0; move < 6; move++) {
        
             if (game->board[player][move] > 0) {
 
-	            tmp = getBestWorstValue(gamecpy, move, depth - 1, alpha, beta);
+	        tmp = getBestWorstValue(gamecpy, move, depth - 1, alpha, beta);
                 if (tmp < value) value = tmp;
                 if (value < beta) beta = value;
                 if (beta <= alpha) break;
