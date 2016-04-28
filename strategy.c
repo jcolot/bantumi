@@ -22,6 +22,7 @@
  * Calcule le meilleur resultat qu'on est assure 
  * d'obtenir dans le "worst case scenario"
  * a une profondeur d'arbre donnee (depth)
+ * MINIMAX avec elagage alpha-beta
  */
 
 int getBestValue(game_t ** gameStack, int move, int depth, int maxDepth, int alpha, int beta) {
