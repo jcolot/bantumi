@@ -330,7 +330,7 @@ void stateMachine() {
                         
                     case 'R':
                         firstPlayer = -1;
-                        printf ("\nFirst player set randomly at the beginning of the game\n\n");
+                        printf ("\nFirst player will be set randomly at the beginning of the game\n\n");
                         break;
                         
                     case 'P':
