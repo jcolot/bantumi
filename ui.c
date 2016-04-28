@@ -221,7 +221,7 @@ void stateMachine() {
                
                 printf("Make a selection:\n\n");
                 printf("(P)lay\n");
-                printf("(C)onfigure the game\n\n");
+                printf("(C)onfigure the game\\n");
                 printf("(Q)uit the game\n\n");
                 printf("Your choice> ");
 
