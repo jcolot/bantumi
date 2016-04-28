@@ -391,6 +391,8 @@ void stateMachine() {
                             maxDepth = tmp;
                             printf ("\nInitial number of seeds set to %d\n", maxDepth);
                             state = CONFIG_STATE;
+                        } else {
+                           printf("\nError: entry '%d' is not in range\n", tmp);
                         }
                     } else if (toupper(input[0]) == 'R') { 
                         printf ("\nIntial number of seeds will be set randomly at the beginning of the game\n");
