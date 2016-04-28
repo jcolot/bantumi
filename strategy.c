@@ -34,7 +34,7 @@ int getBestValue(game_t ** gameStack, int move, int depth, int maxDepth, int alp
     game_t * gameCpy;
     
     gameCpy = gameStack[depth];
-    memcpy(gameCpy, gameStack[depth - 1], sizeof(game_t));
+    memcpy(&gameCpy, &gameStack[depth - 1], sizeof(game_t));
    
     player = gameCpy->player;
     doMove(gameCpy, move);
@@ -44,7 +44,7 @@ int getBestValue(game_t ** gameStack, int move, int depth, int maxDepth, int alp
  *  Fin de partie, on retourne le value
  */
         value = evalBoard(gameCpy);
-		return  value;
+        return  value;
     }
 
     if (depth == maxDepth) {
