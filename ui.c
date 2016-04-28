@@ -352,7 +352,7 @@ void stateMachine() {
  * Configuration de la profondeur d'arbre a explorer
  * 
  */ 
-                printf ("\nDefine the difficulty level (0 is easiest and 15 is hardest)\n\n");
+                printf ("\nSelect the difficulty level (0 is easiest and 15 is hardest)\n\n");
                 printf("Your choice> ");
                
                 if (fgets(input, sizeof(input), stdin) != NULL) {
@@ -362,6 +362,7 @@ void stateMachine() {
                         if (tmp >= 0 && tmp <= 15) {
                             maxDepth = tmp;
                             printf ("\nDifficulty level set to %d\n\n", maxDepth);
+                            state = CONFIG_STATE;
                         }
                     } else {
                         printf("\nError: entry '%s' is not valid\n\n", input);
