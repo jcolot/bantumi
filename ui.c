@@ -323,7 +323,7 @@ void stateMachine() {
                     
                     case 'C':
                         firstPlayer = 1;
-                        printf ("\nComputer will play first\n")};
+                        printf ("\nComputer will play first\n");
                         state = CONFIG_STATE;
                         break;
                         
