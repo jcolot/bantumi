@@ -24,34 +24,33 @@
  * a une profondeur d'arbre donnee (depth)
  */
 
-int getBestWorstValue(game_t ** gameStack, int move, int depth, int alpha, int beta) {
+int getBestWorstValue(game_t ** gameStack, int move, int depth, int maxDepth, int alpha, int beta) {
 
     int value;
     int tmp;
     player_t player;
     
-    game_t * gamecpy;
+    game_t * gameCpy;
     
-    depth = depth - 1
-    gamecpy = gameStack[depth];
-    memcpy(gamecpy, gameStack[depth + 1], sizeof(game_t));
+    gameCpy = gameStack[depth + 1];
+    memcpy(gameCpy, gameStack[depth], sizeof(game_t));
    
-    player = gamecpy->player;
-    doMove(gamecpy, move);
+    player = gameCpy->player;
+    doMove(gameCpy, move);
 
-    if (isEndGame(gamecpy)) {
+    if (isEndGame(gameCpy)) {
 /*
  *  Fin de partie, on retourne le value
  */
-        value = evalBoard(gamecpy);
-        free(gamecpy);
-	    return  value;
+        value = evalBoard(gameCpy);
+        free(gameCpy);
+		return  value;
     }
 
-    if (!depth) {
-        value = evalBoard(gamecpy);
-        free(gamecpy);
-	    return  value;
+    if (depth == maxDepth) {
+        value = evalBoard(gameCpy);
+        free(gameCpy);
+		return  value;
     }
     
 /*
@@ -71,7 +70,7 @@ int getBestWorstValue(game_t ** gameStack, int move, int depth, int alpha, int b
  */      
             if (game->board[player][move] > 0) {
 
-	        tmp = getBestWorstValue(gamecpy, move, depth - 1, alpha, beta);
+	        tmp = getBestWorstValue(gameCpy, move, depth - 1, alpha, beta);
                 if (tmp > value) value = tmp;
                 if (value > alpha) alpha = value;
                 if (beta <= alpha) break;
@@ -83,7 +82,7 @@ int getBestWorstValue(game_t ** gameStack, int move, int depth, int alpha, int b
        
             if (game->board[player][move] > 0) {
 
-	        tmp = getBestWorstValue(gamecpy, move, depth - 1, alpha, beta);
+	        tmp = getBestWorstValue(gameCpy, move, depth - 1, alpha, beta);
                 if (tmp < value) value = tmp;
                 if (value < beta) beta = value;
                 if (beta <= alpha) break;
@@ -91,7 +90,7 @@ int getBestWorstValue(game_t ** gameStack, int move, int depth, int alpha, int b
         }
     }
 
-    free(gamecpy);
+    free(gameCpy);
     return value;
 }
 
