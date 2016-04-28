@@ -29,10 +29,10 @@
  *
  */
 
-game_t * initGame() {
+game_t * initGame(int firstPlayer, int initSeeds) {
 
-    short i;
-    short iniSeeds;
+    int i;
+    int iniSeeds;
     game_t * game;
     game  = malloc(sizeof(game_t));
 
@@ -89,7 +89,7 @@ game_t * initGame() {
 
 state_t playGame(game_t * game) {
 
-    short move;
+    int move;
     char input[80];
     int i;
     char c;
@@ -246,9 +246,9 @@ void doMove(game_t * game, int bowlNum) {
 
 bool isEndGame(game_t * game) {
 
-    short player;
-    short bowlNum;
-    short emptyBowls;
+    int player;
+    int bowlNum;
+    int emptyBowls;
 
 /*
  * Si 6 les bols sont vides d'un des deux cotes, 
