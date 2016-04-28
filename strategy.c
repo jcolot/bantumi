@@ -71,7 +71,7 @@ int getBestValue(game_t ** gameStack, int move, int depth, int maxDepth, int alp
  */      
             if (game->board[player][move] > 0) {
 
-	        tmp = getBestValue(gameCpy, move, depth + 1, maxDepth, alpha, beta);
+				tmp = getBestValue(gameStack, move, depth + 1, maxDepth, alpha, beta);
                 if (tmp > value) value = tmp;
                 if (value > alpha) alpha = value;
                 if (beta <= alpha) break;
@@ -82,8 +82,8 @@ int getBestValue(game_t ** gameStack, int move, int depth, int maxDepth, int alp
         for (move = 0; move < 6; move++) {
        
             if (game->board[player][move] > 0) {
-
-	        tmp = getBestWorstValue(gameCpy, move, depth - 1, alpha, beta);
+     			
+     			tmp = getBestWorstValue(gameCpy, move, depth - 1, alpha, beta);
                 if (tmp < value) value = tmp;
                 if (value < beta) beta = value;
                 if (beta <= alpha) break;
