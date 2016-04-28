@@ -394,7 +394,7 @@ void stateMachine() {
                             printf ("\n\nInitial number of seeds set to \n", depth);
                             state = CONFIG_STATE;
                         }
-                    } else if (toupper(input[0] = 'R') { 
+                    } else if (toupper(input[0]) == 'R') { 
                         printf ("\n\nIntial number of seeds set randomly at the beginning of the game\n");
                         state = CONFIG_STATE;
                     } else { 
