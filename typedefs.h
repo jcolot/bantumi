@@ -12,7 +12,7 @@ typedef struct {
 typedef enum {
         INIT_STATE,
         CONFIG_STATE,
-        INITSEEDS_STATE,
+        INISEEDS_STATE,
         DEPTH_STATE,
         FIRSTPLAYER_STATE,
         PLAY_STATE,
