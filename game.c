@@ -32,15 +32,13 @@
 game_t * initGame(int firstPlayer, int initSeeds) {
 
     int i;
-    int iniSeeds;
     game_t * game;
     game  = malloc(sizeof(game_t));
 
 /*   
  *  choisi aleatoirement le nombre de graines entre 1 et 6 
  */
-
-    iniSeeds = 1 + rand() % 6;
+    if (initSeeds == 0) iniSeeds = 1 + rand() % 6;
 
     for (i = 0; i < 14; i++) {
        (*game->board)[i] = iniSeeds;
@@ -54,7 +52,7 @@ game_t * initGame(int firstPlayer, int initSeeds) {
     game->board[0][6] = 0;
     game->board[1][6] = 0;
 
-    game->player = rand() % 2;
+    if (player == -1) game->player = rand() % 2;
 
 /*   
  *  choisi aleatoirement le premier joueur
