@@ -3,7 +3,7 @@
 #include "typedefs.h"
 
 game_t * initGame(); 
-state_t playGame(game_t * game);
+state_t playGame(game_t * game, int maxDepth);
 bool isEndGame(game_t * game);
 void doMove(game_t * game, int bowlNum);
 void displayBoard(game_t * game);
