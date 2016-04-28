@@ -221,7 +221,7 @@ void stateMachine() {
                
                 printf("Make a selection:\n\n");
                 printf("(P)lay\n");
-                printf("(C)onfigure the game\\n");
+                printf("(C)onfigure the game\n");
                 printf("(Q)uit the game\n\n");
                 printf("Your choice> ");
 
@@ -264,7 +264,7 @@ void stateMachine() {
  * Configuration
  * 
  */ 
-                printf("Select the parameter to configure:\n\n");
+                printf("\nSelect the parameter to configure:\n\n");
                 printf("(F)irst player\n");
                 printf("(D)ifficulty\n");
                 printf("(I)nitial number of seeds per bowl\n");
