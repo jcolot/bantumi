@@ -24,7 +24,7 @@
  * a une profondeur d'arbre donnee (depth)
  */
 
-int getBestWorstValue(game_t ** gameStack, int move, int depth, int maxDepth, int alpha, int beta) {
+int getBestValue(game_t ** gameStack, int move, int depth, int maxDepth, int alpha, int beta) {
 
     int value;
     int tmp;
