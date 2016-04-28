@@ -88,7 +88,6 @@ int getBestValue(game_t ** gameStack, int move, int depth, int maxDepth, int alp
         }
     }
 
-    free(gameCpy);
     return value;
 }
 
