@@ -361,8 +361,10 @@ void stateMachine() {
                     if (input[0] != '\n' && (*p == '\n' || *p == '\0')) {
                         if (tmp >= 0 && tmp <= 15) {
                             maxDepth = tmp;
-                            printf ("\nDifficulty level set to %d\n\n", maxDepth);
+                            printf ("\nDifficulty level set to %d\n", maxDepth);
                             state = CONFIG_STATE;
+                        } else {
+                           printf("\nError: entry '%d' is not in range\n\n", tmp);
                         }
                     } else {
                         printf("\nError: entry '%s' is not valid\n\n", input);
