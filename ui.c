@@ -294,7 +294,7 @@ void stateMachine() {
                         break;
 
                     default:
-                        printf("\nError: entry '%c' is not valid\n\n", input[0]);
+                        printf("\n\nError: entry '%c' is not valid\n\n", input[0]);
                 }
                 
                 break;
@@ -352,7 +352,7 @@ void stateMachine() {
  * Configuration de la profondeur d'arbre a explorer
  * 
  */ 
-                printf ("Define the difficulty level (0 is easiest and 15 is hardest)\n\n");
+                printf ("\nDefine the difficulty level (0 is easiest and 15 is hardest)\n\n");
                 printf("Your choice> ");
                
                 if (fgets(input, sizeof(input), stdin) != NULL) {
