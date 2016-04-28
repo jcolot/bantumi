@@ -335,7 +335,7 @@ void stateMachine() {
                         
                     case 'R':
                         firstPlayer = -1;
-                        printf ("\nFirst player set randomly at the beginning of the game\n\n")};
+                        printf ("\nFirst player set randomly at the beginning of the game\n\n");
                         break;
                         
                     case 'P':
@@ -395,7 +395,7 @@ void stateMachine() {
                             state = CONFIG_STATE;
                         }
                     } else if (toupper(input[0] = 'R') { 
-                        printf ("\n\nIntial number of seeds set randomly at the beginning of the game\n")};
+                        printf ("\n\nIntial number of seeds set randomly at the beginning of the game\n");
                         state = CONFIG_STATE;
                     } else { 
                         printf("\nError: entry '%s' is not valid\n\n", input);
