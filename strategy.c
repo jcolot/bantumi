@@ -21,7 +21,7 @@
 /* 
  * Definit jusqu'a quel profondeur d'arbre chercher
  */
-#define DEPTH 14
+#define MAXDEPTH 14
 
 /*
  * Calcule le meilleur resultat qu'on est assure 
