@@ -29,7 +29,7 @@
  *
  */
 
-game_t * initGame(int firstPlayer, int initSeeds) {
+game_t * initGame(int firstPlayer, int iniSeeds) {
 
     int i;
     game_t * game;
@@ -38,12 +38,9 @@ game_t * initGame(int firstPlayer, int initSeeds) {
 /*   
  *  choisi aleatoirement le nombre de graines entre 1 et 6 
  */
-    if (initSeeds == 0) iniSeeds = 1 + rand() % 6;
+    if (iniSeeds == 0) iniSeeds = 1 + rand() % 6;
 
-    for (i = 0; i < 14; i++) {
-       (*game->board)[i] = iniSeeds;
-    }
-
+    for (i = 0; i < 14; i++) (*game->board)[i] = iniSeeds;
 
 /*
  * affecte les scores a 0
