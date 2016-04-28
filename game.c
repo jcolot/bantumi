@@ -82,7 +82,7 @@ game_t * initGame(int firstPlayer, int iniSeeds) {
  *
  */
 
-state_t playGame(game_t * game) {
+state_t playGame(game_t * game, int maxDepth) {
 
     int move;
     char input[80];
@@ -149,14 +149,14 @@ state_t playGame(game_t * game) {
  *  on deleguera la strategie a partir d'ici
  *
  */
-            do {
-
-                move = rand() % 6;
-
-            } while (game->board[computer][move] == 0);
+            if (maxDepth == 0) {
+                do {
+                    move = rand() % 6;
+                } while (game->board[computer][move] == 0);
+            } else {
+                move = getBestMove(game, maxDepth); 
+            }
             
-            move = getBestMove(game); 
-          
     	    printf("Computer plays %c:\n", move + 'a'); 
             doMove(game, move);
             displayBoard(game);
