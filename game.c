@@ -147,9 +147,8 @@ state_t playGame(game_t * game, int maxDepth) {
         } else {
 
 /*   
- *  On choisi aleatoirement le coup du joueur machine
- *  Dans la troisieme partie du projet, 
- *  on deleguera la strategie a partir d'ici
+ *  On choisi aleatoirement le coup du joueur machine si maxDepth = 0
+ *  Sinon on cherche le meilleur coup en minimax jusqu'a la profondeur maxdepth
  *
  */
             if (maxDepth == 0) {
