@@ -34,7 +34,7 @@ int getBestValue(game_t ** gameStack, int move, int depth, int maxDepth, int alp
     game_t * gameCpy;
     
     gameCpy = gameStack[depth];
-    memcpy(&gameCpy, &gameStack[depth - 1], sizeof(game_t));
+    memcpy(gameCpy, gameStack[depth - 1], sizeof(game_t));
    
     player = gameCpy->player;
     doMove(gameCpy, move);
@@ -104,9 +104,8 @@ int getBestMove(game_t * game, int maxDepth) {
     int move;
     int tmp;
     
-    game_t * gameStack;
+    game_t ** gameStack;
     gameStack = malloc(sizeof(game_t) * (maxDepth + 1));
-        printf("debug");
     memcpy(&gameStack[0], game, sizeof(game_t));
 
 
@@ -119,7 +118,7 @@ int getBestMove(game_t * game, int maxDepth) {
 /*
  *  Coup non legal
  */
-            tmp = getBestValue(gameStack, move, 0, maxDepth, -INT_MAX, INT_MAX);
+            tmp = getBestValue(gameStack, move, 1, maxDepth, -INT_MAX, INT_MAX);
             
             if (tmp >= bestValue) {
                 bestValue = tmp;
