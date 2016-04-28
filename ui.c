@@ -364,7 +364,7 @@ void stateMachine() {
                             printf ("\nDifficulty level set to %d\n", maxDepth);
                             state = CONFIG_STATE;
                         } else {
-                           printf("\nError: entry '%d' is not in range\n\n", tmp);
+                           printf("\nError: entry '%d' is not in range\n", tmp);
                         }
                     } else {
                         printf("\nError: entry '%s' is not valid\n\n", input);
