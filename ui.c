@@ -165,7 +165,7 @@ void printScore(game_t * game) {
 
 
     if (game->board[human][6] > game->board[computer][6]) {
-        printf("Your won: %d-%d\n\n", game->board[human][6], game->board[computer][6]) {
+        printf("Your won: %d-%d\n\n", game->board[human][6], game->board[computer][6]);
     } else if (game->board[human][6] < game->board[computer][6]) {
         printf("Game over!\n\n");
         printf("You lost: %d-%d\n\n", game->board[human][6], game->board[computer][6]);
