@@ -386,7 +386,7 @@ void stateMachine() {
                     if (input[0] != '\n' && (*p == '\n' || *p == '\0')) {
                         if (tmp >= 1 && tmp <= 6) {
                             maxDepth = tmp;
-                            printf ("\n\nInitial number of seeds set to \n", maxDepth);
+                            printf ("\n\nInitial number of seeds set to %d\n", maxDepth);
                             state = CONFIG_STATE;
                         }
                     } else if (toupper(input[0]) == 'R') { 
