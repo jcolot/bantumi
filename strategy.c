@@ -24,18 +24,19 @@
  * a une profondeur d'arbre donnee (depth)
  */
 
-int getBestWorstValue(game_t * game, int move, int depth, int alpha, int beta) {
+int getBestWorstValue(game_t ** gameStack, int move, int depth, int alpha, int beta) {
 
     int value;
     int tmp;
     player_t player;
     
     game_t * gamecpy;
-
-    gamecpy = malloc(sizeof(game_t));
-    memcpy(gamecpy, game, sizeof(game_t));
+    
+    depth = depth - 1
+    gamecpy = gameStack[depth];
+    memcpy(gamecpy, gameStack[depth + 1], sizeof(game_t));
    
-    player = game->player;
+    player = gamecpy->player;
     doMove(gamecpy, move);
 
     if (isEndGame(gamecpy)) {
@@ -105,6 +106,10 @@ int getBestMove(game_t * game, int maxDepth) {
     int player;
     int move;
     int tmp;
+    
+    game_t ** gameStack;
+    gameStack = malloc(sizeof(game_t) * (maxDepth + 1));
+    memcpy(gameStack[maxDepth], game, sizeof(Board));
 
     player = game->player;
     bestMove = -1;
@@ -115,12 +120,13 @@ int getBestMove(game_t * game, int maxDepth) {
 /*
  *  Coup non legal
  */
-	        tmp = getBestWorstValue(game, move, maxDepth, -INT_MAX, INT_MAX);
-
+            tmp = getBestWorstValue(gameStack, move, maxDepth, -INT_MAX, INT_MAX);
+            
             if (tmp >= bestValue) {
                 bestValue = tmp;
                 bestMove = move;
-	        }
+                
+            }
         }
     }
     return bestMove;
