@@ -115,7 +115,7 @@ int getBestMove(game_t * game, int maxDepth) {
 /*
  *  Coup non legal
  */
-	        tmp = getBestWorstValue(game, move, maxdepth, -INT_MAX, INT_MAX);
+	        tmp = getBestWorstValue(game, move, maxDepth, -INT_MAX, INT_MAX);
 
             if (tmp >= bestValue) {
                 bestValue = tmp;
