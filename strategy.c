@@ -83,7 +83,7 @@ int getBestValue(game_t ** gameStack, int move, int depth, int maxDepth, int alp
        
             if (game->board[player][move] > 0) {
      			
-     			tmp = getBestWorstValue(gameCpy, move, depth - 1, alpha, beta);
+     			tmp = getBestValue(gameStack, move, depth + 1, maxDepth, alpha, beta);
                 if (tmp < value) value = tmp;
                 if (value < beta) beta = value;
                 if (beta <= alpha) break;
@@ -120,7 +120,7 @@ int getBestMove(game_t * game, int maxDepth) {
 /*
  *  Coup non legal
  */
-            tmp = getBestWorstValue(gameStack, move, maxDepth, -INT_MAX, INT_MAX);
+            tmp = getBestValue(gameStack, move, maxDepth, -INT_MAX, INT_MAX);
             
             if (tmp >= bestValue) {
                 bestValue = tmp;
