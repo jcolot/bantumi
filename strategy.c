@@ -44,13 +44,11 @@ int getBestValue(game_t ** gameStack, int move, int depth, int maxDepth, int alp
  *  Fin de partie, on retourne le value
  */
         value = evalBoard(gameCpy);
-        free(gameCpy);
 		return  value;
     }
 
     if (depth == maxDepth) {
         value = evalBoard(gameCpy);
-        free(gameCpy);
 		return  value;
     }
     
@@ -69,9 +67,8 @@ int getBestValue(game_t ** gameStack, int move, int depth, int maxDepth, int alp
  /*
  * On ne tient pas compte des coups non-legaux
  */      
-            if (game->board[player][move] > 0) {
-
-				tmp = getBestValue(gameStack, move, depth + 1, maxDepth, alpha, beta);
+            if (gameCpy->board[player][move] > 0) {
+                tmp = getBestValue(gameStack, move, depth + 1, maxDepth, alpha, beta);
                 if (tmp > value) value = tmp;
                 if (value > alpha) alpha = value;
                 if (beta <= alpha) break;
@@ -81,7 +78,7 @@ int getBestValue(game_t ** gameStack, int move, int depth, int maxDepth, int alp
         value = INT_MAX;
         for (move = 0; move < 6; move++) {
        
-            if (game->board[player][move] > 0) {
+            if (gameCpy->board[player][move] > 0) {
      			
      			tmp = getBestValue(gameStack, move, depth + 1, maxDepth, alpha, beta);
                 if (tmp < value) value = tmp;
