@@ -367,7 +367,7 @@ void stateMachine() {
                            printf("\nError: entry '%d' is not in range\n", tmp);
                         }
                     } else {
-                        printf("\nError: entry '%s' is not valid\n\n", input);
+                        printf("\nError: entry is not valid\n\n");
                     }
                 } else {
                     state = FAILURE_STATE;
@@ -396,7 +396,7 @@ void stateMachine() {
                         printf ("\n\nIntial number of seeds set randomly at the beginning of the game\n");
                         state = CONFIG_STATE;
                     } else { 
-                        printf("\nError: entry '%s' is not valid\n\n", input);
+                        printf("\nError: entry is not valid\n\n");
                     }
                 } else {
                     state = FAILURE_STATE;
