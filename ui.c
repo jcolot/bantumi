@@ -393,7 +393,7 @@ void stateMachine() {
                             state = CONFIG_STATE;
                         }
                     } else if (toupper(input[0]) == 'R') { 
-                        printf ("\n\nIntial number of seeds set randomly at the beginning of the game\n");
+                        printf ("\nIntial number of seeds will be set randomly at the beginning of the game\n");
                         state = CONFIG_STATE;
                     } else { 
                         printf("\nError: entry is not valid\n\n");
