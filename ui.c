@@ -365,7 +365,7 @@ void stateMachine() {
                    
                     if (input[0] != '\n' && (*p == '\n' || *p == '\0')) {
                         if (tmp >= 0 && tmp <= 15) {
-                            depth = tmp;
+                            maxDepth = tmp;
                             printf ("\nDifficulty level set to \n\n", depth);
                         }
                     } else {
