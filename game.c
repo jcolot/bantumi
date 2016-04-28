@@ -49,7 +49,7 @@ game_t * initGame(int firstPlayer, int iniSeeds) {
     game->board[0][6] = 0;
     game->board[1][6] = 0;
 
-    if (player == -1) game->player = rand() % 2;
+    if (firstPlayer == -1) game->player = rand() % 2;
 
 /*   
  *  choisi aleatoirement le premier joueur
