@@ -20,6 +20,8 @@
 #include "game.h"
 #include "ui.h"
 
+#define MAXDEPTH 0
+
 /*
  *   Fonction:  displayBoard 
  *   -----------------------
@@ -206,7 +208,7 @@ void stateMachine() {
  */
 
     int iniSeeds = -1;
-    int depth = DEPTH;
+    int maxDepth = MAXDEPTH;
     int tmp;
     game_t * game;
 
@@ -259,7 +261,7 @@ void stateMachine() {
  */ 
                 game = initGame(firstPlayer, iniSeeds);
                 displayBoard(game);
-                state = playGame(game);
+                state = playGame(game, maxDepth);
                 break;
                 
             case CONFIG_STATE:
