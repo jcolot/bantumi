@@ -24,7 +24,7 @@
  * a une profondeur d'arbre donnee (depth)
  */
 
-int getBestWorstValue(game_t * game, int move, int depth, int alpha, int beta) {
+int getBestValue(game_t * game, int move, int depth, int alpha, int beta) {
 
     int value;
     int tmp;
@@ -70,7 +70,7 @@ int getBestWorstValue(game_t * game, int move, int depth, int alpha, int beta) {
  */      
             if (game->board[player][move] > 0) {
 
-	        tmp = getBestWorstValue(gamecpy, move, depth - 1, alpha, beta);
+	        tmp = getBestValue(gamecpy, move, depth - 1, alpha, beta);
                 if (tmp > value) value = tmp;
                 if (value > alpha) alpha = value;
                 if (beta <= alpha) break;
@@ -82,7 +82,7 @@ int getBestWorstValue(game_t * game, int move, int depth, int alpha, int beta) {
        
             if (game->board[player][move] > 0) {
 
-	        tmp = getBestWorstValue(gamecpy, move, depth - 1, alpha, beta);
+	        tmp = getBestValue(gamecpy, move, depth - 1, alpha, beta);
                 if (tmp < value) value = tmp;
                 if (value < beta) beta = value;
                 if (beta <= alpha) break;
@@ -115,7 +115,7 @@ int getBestMove(game_t * game, int maxDepth) {
 /*
  *  Coup non legal
  */
-	        tmp = getBestWorstValue(game, move, maxDepth, -INT_MAX, INT_MAX);
+	        tmp = getBestValue(game, move, maxDepth, -INT_MAX, INT_MAX);
 
             if (tmp >= bestValue) {
                 bestValue = tmp;
