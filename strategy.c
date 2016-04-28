@@ -18,11 +18,6 @@
 #include "strategy.h"
 
 
-/* 
- * Definit jusqu'a quel profondeur d'arbre chercher
- */
-#define MAXDEPTH 14
-
 /*
  * Calcule le meilleur resultat qu'on est assure 
  * d'obtenir dans le "worst case scenario"
@@ -104,7 +99,7 @@ int getBestWorstValue(game_t * game, int move, int depth, int alpha, int beta) {
  * en comparant les meilleurs value
  */
 
-int getBestMove(game_t * game) {
+int getBestMove(game_t * game, int maxDepth) {
     int bestMove;
     int bestValue;
     int player;
@@ -120,7 +115,7 @@ int getBestMove(game_t * game) {
 /*
  *  Coup non legal
  */
-	        tmp = getBestWorstValue(game, move, DEPTH, -INT_MAX, INT_MAX);
+	        tmp = getBestWorstValue(game, move, maxdepth, -INT_MAX, INT_MAX);
 
             if (tmp >= bestValue) {
                 bestValue = tmp;
