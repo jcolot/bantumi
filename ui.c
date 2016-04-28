@@ -20,7 +20,7 @@
 #include "game.h"
 #include "ui.h"
 
-#define MAXDEPTH 0
+#define MAXDEPTH 10
 
 /*
  *   Fonction:  displayBoard 
