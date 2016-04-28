@@ -193,7 +193,7 @@ void stateMachine() {
 
     char input[80];
     state_t state = INIT_STATE;
-    long int * p;
+    char ** p;
     
 /* 
  * Si firstPlayer =  0, c'est human qui joue en premier
