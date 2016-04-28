@@ -1,6 +1,6 @@
 #ifndef STRATEGY_H
 #define STRATEGY_H
-int getBestScore(game_t * game, int move, int maxDepth);
+int getBestWorstScore(game_t * game, int move, int depth, int maxDepth, int alpha, int beta);
 int getBestMove(game_t * game, int maxDepth); 
 int evalBoard(game_t * game);
 #endif
