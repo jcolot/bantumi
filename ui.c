@@ -390,7 +390,7 @@ void stateMachine() {
                    
                     if (input[0] != '\n' && (*p == '\n' || *p == '\0')) {
                         if (tmp >= 1 && tmp <= 6) {
-                            depth = tmp;
+                            maxDepth = tmp;
                             printf ("\n\nInitial number of seeds set to \n", maxDepth);
                             state = CONFIG_STATE;
                         }
