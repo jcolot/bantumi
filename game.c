@@ -38,7 +38,7 @@ game_t * initGame(int firstPlayer, int iniSeeds) {
 /*   
  *  choisi aleatoirement le nombre de graines entre 1 et 6 
  */
-    if (iniSeeds == 0) iniSeeds = 1 + rand() % 6;
+    if (iniSeeds == -1) iniSeeds = 1 + rand() % 6;
 
     for (i = 0; i < 14; i++) (*game->board)[i] = iniSeeds;
 
