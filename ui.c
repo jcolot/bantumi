@@ -380,7 +380,7 @@ void stateMachine() {
  * Configuration de la profondeur d'arbre a explorer
  * 
  */ 
-                printf ("Define the initial number of seeds (between 1 and 6, or 'R' for random)\n\n");
+                printf ("\nDefine the initial number of seeds (between 1 and 6, or 'R' for random)\n\n");
                 printf("Your choice> ");
                
                 if (fgets(input, sizeof(input), stdin) != NULL) {
@@ -389,7 +389,7 @@ void stateMachine() {
                     if (input[0] != '\n' && (*p == '\n' || *p == '\0')) {
                         if (tmp >= 1 && tmp <= 6) {
                             maxDepth = tmp;
-                            printf ("\n\nInitial number of seeds set to %d\n", maxDepth);
+                            printf ("\nInitial number of seeds set to %d\n", maxDepth);
                             state = CONFIG_STATE;
                         }
                     } else if (toupper(input[0]) == 'R') { 
