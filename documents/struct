@@ -1,6 +1,0 @@
-typedef enum {human, computer} player_t;
-
-typedef struct game {
-    short board[2][7];
-    player_t player; 
-} game_t;
