@@ -25,7 +25,7 @@
  * MINIMAX avec elagage alpha-beta
  */
 
-int getBestValue(game_t * gameStack, int move, int depth, int maxDepth, int alpha, int beta) {
+int getBestValue(game_t * gameStack, int move, int depth, int maxDepth, int alpha, int beta, long long maxTime) {
 
     int value;
     int tmp;
@@ -52,6 +52,7 @@ int getBestValue(game_t * gameStack, int move, int depth, int maxDepth, int alph
         return  value;
     }
     
+    if (currentTimestamp() > maxTime) return -1;
 /*
  * La boucle principale
  * Si le joueur courant est computer, on cherche le max
@@ -128,6 +129,65 @@ int getBestMove(game_t * game, int maxDepth) {
         }
     }
     return bestMove;
+}
+
+int getBestMoveIterativeDeepening(game_t * game, int time) {
+    int bestMove;
+    int bestValue;
+    int player;
+    int move;
+    int tmp;
+    int depth;
+    long long maxTime;
+    
+    game_t * gameStack;
+    gameStack = (game_t *)malloc(sizeof(game_t) * (maxDepth + 1));
+    memcpy(&gameStack[0], game, sizeof(game_t));
+
+    printf("test");
+
+    player = game->player;
+    bestMove = -1;
+    bestValue = -INT_MAX;
+    
+    
+/*
+ * On laisse 10 sec pour completer
+ */
+    maxTime = currentTimestamp() + 1000000;
+
+/* 
+ *    On commence a la profondeur 1
+ */
+    depth = 1;
+    while() {
+        for (move = 0; move < 6; move++) {
+            if (game->board[player][move] != 0) {
+/*
+ *  On verifie si le coup est legal
+ */
+                tmp = getBestValue(gameStack, move, 1, depth, -INT_MAX, INT_MAX, long long maxTime);
+            
+                if (tmp >= bestValue) {
+                    bestValue = tmp;
+                    tmpBestMove = move;
+                }
+            }
+        depth++;
+        }
+/* A chaque fin d'iteration, on conserve le meilleur coup        
+ *
+ */
+        bestMove = tmpBestMove;
+    }
+    return bestMove;
+}
+
+long long currentTimestamp() {
+    struct timeval te; 
+    gettimeofday(&te, NULL);
+    long long milliseconds = te.tv_sec*1000LL + te.tv_usec/1000; 
+    return milliseconds;
 }
 
 int evalBoard(game_t * game) {
