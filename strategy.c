@@ -25,7 +25,7 @@
  * MINIMAX avec elagage alpha-beta
  */
 
-int getBestValue(game_t ** gameStack, int move, int depth, int maxDepth, int alpha, int beta) {
+int getBestValue(game_t * gameStack, int move, int depth, int maxDepth, int alpha, int beta) {
 
     int value;
     int tmp;
@@ -33,9 +33,8 @@ int getBestValue(game_t ** gameStack, int move, int depth, int maxDepth, int alp
     
     game_t * gameCpy;
     
-
-    memcpy(gameStack[depth], gameStack[depth - 1], sizeof(game_t));
-    gameCpy = &gameStack[depth];  
+    memcpy(&gameStack[depth], &gameStack[depth - 1], sizeof(game_t));
+    gameCpy = &gameStack[depth];
 
     player = gameCpy->player;
     doMove(gameCpy, move);
@@ -50,7 +49,7 @@ int getBestValue(game_t ** gameStack, int move, int depth, int maxDepth, int alp
 
     if (depth == maxDepth) {
         value = evalBoard(gameCpy);
-		return  value;
+        return  value;
     }
     
 /*
@@ -80,8 +79,8 @@ int getBestValue(game_t ** gameStack, int move, int depth, int maxDepth, int alp
         for (move = 0; move < 6; move++) {
        
             if (gameCpy->board[player][move] > 0) {
-     			
-     			tmp = getBestValue(gameStack, move, depth + 1, maxDepth, alpha, beta);
+                 
+                tmp = getBestValue(gameStack, move, depth + 1, maxDepth, alpha, beta);
                 if (tmp < value) value = tmp;
                 if (value < beta) beta = value;
                 if (beta <= alpha) break;
@@ -108,6 +107,7 @@ int getBestMove(game_t * game, int maxDepth) {
     gameStack = (game_t *)malloc(sizeof(game_t) * (maxDepth + 1));
     memcpy(&gameStack[0], game, sizeof(game_t));
 
+    printf("test");
 
     player = game->player;
     bestMove = -1;
@@ -118,7 +118,7 @@ int getBestMove(game_t * game, int maxDepth) {
 /*
  *  Coup non legal
  */
-            tmp = getBestValue(&gameStack, move, 1, maxDepth, -INT_MAX, INT_MAX);
+            tmp = getBestValue(gameStack, move, 1, maxDepth, -INT_MAX, INT_MAX);
             
             if (tmp >= bestValue) {
                 bestValue = tmp;
