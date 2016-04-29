@@ -100,17 +100,16 @@ int getBestMove(game_t * game, int maxDepth) {
     gameStack = (game_t *)malloc(sizeof(game_t) * (maxDepth + 1));
     memcpy(&gameStack[0], game, sizeof(game_t));
 
-    printf("test");
-
     player = game->player;
     bestMove = -1;
     bestValue = -INT_MAX;
 
     for (move = 0; move < 6; move++) {
-        if (game->board[player][move] != 0) {
 /*
- *  Coup non legal
+ *  On Verifie que le coup est legal
  */
+        if (game->board[player][move] != 0) {
+
             alphabeta[0] = -INT_MAX;
             alphabeta[1] = INT_MAX;
 
