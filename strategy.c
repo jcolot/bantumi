@@ -73,8 +73,8 @@ int getBestValue(game_t * gameStack, int move, int depth, int maxDepth, int alph
             tmp = minimax * getBestValue(gameStack, move, depth + 1, maxDepth, alphabeta);
             if (tmp > value) {
                 value = tmp;
-                alphabet[player] = tmp;
-                if (alphabet[0] - alphabet[1] >= 0) break;
+                alphabeta[player] = tmp;
+                if (alphabeta[0] - alphabeta[1] >= 0) break;
             }
         }
     }
@@ -91,7 +91,7 @@ int getBestValue(game_t * gameStack, int move, int depth, int maxDepth, int alph
 int getBestMove(game_t * game, int maxDepth) {
     int bestMove;
     int bestValue;
-    int alphabet[2];
+    int alphabeta[2];
     int player;
     int move;
     int tmp;
@@ -111,8 +111,8 @@ int getBestMove(game_t * game, int maxDepth) {
 /*
  *  Coup non legal
  */
-            alphabet[2] = {INT_MAX, -INT_MAX};
-            tmp = getBestValue(gameStack, move, 1, maxDepth, alphabet);
+            alphabeta[2] = {INT_MAX, -INT_MAX};
+            tmp = getBestValue(gameStack, move, 1, maxDepth, alphabeta);
             
             if (tmp >= bestValue) {
                 bestValue = tmp;
