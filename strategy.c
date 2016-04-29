@@ -38,7 +38,7 @@ int getBestValue(game_t * gameStack, int move, int depth, int maxDepth, int alph
     gameCpy = &gameStack[depth];
 
     player = gameCpy->player;
-	minimax = (player - 1) & 1;
+    minimax = (player - 1) & 1;
     doMove(gameCpy, move);
 
     if (isEndGame(gameCpy)) {
