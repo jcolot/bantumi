@@ -25,10 +25,11 @@
  * MINIMAX avec elagage alpha-beta
  */
 
-int getBestValue(game_t * gameStack, int move, int depth, int maxDepth, int alpha, int beta) {
+int getBestValue(game_t * gameStack, int move, int depth, int maxDepth, int alphabeta[2]) {
 
     int value;
     int tmp;
+    int minimax;
     player_t player;
     
     game_t * gameCpy;
@@ -37,6 +38,7 @@ int getBestValue(game_t * gameStack, int move, int depth, int maxDepth, int alph
     gameCpy = &gameStack[depth];
 
     player = gameCpy->player;
+	minimax = (player - 1) & 1;
     doMove(gameCpy, move);
 
     if (isEndGame(gameCpy)) {
@@ -61,32 +63,22 @@ int getBestValue(game_t * gameStack, int move, int depth, int maxDepth, int alph
  *
  */
 
-    if (player == computer) {
-        value = -INT_MAX;
-        for (move = 0; move < 6; move++) {
+    value = minimax * INT_MAX;
+        
+    for (move = 0; move < 6; move++) {
  /*
  * On ne tient pas compte des coups non-legaux
  */      
-            if (gameCpy->board[player][move] > 0) {
-                tmp = getBestValue(gameStack, move, depth + 1, maxDepth, alpha, beta);
-                if (tmp > value) value = tmp;
-                if (value > alpha) alpha = value;
-                if (beta <= alpha) break;
-            }
-        }
-    } else {
-        value = INT_MAX;
-        for (move = 0; move < 6; move++) {
-       
-            if (gameCpy->board[player][move] > 0) {
-                 
-                tmp = getBestValue(gameStack, move, depth + 1, maxDepth, alpha, beta);
-                if (tmp < value) value = tmp;
-                if (value < beta) beta = value;
-                if (beta <= alpha) break;
+        if (gameCpy->board[player][move] > 0) {
+            tmp = minimax * getBestValue(gameStack, move, depth + 1, maxDepth, alphabeta);
+            if (tmp > value) {
+                value = tmp;
+                alphabet[player] = tmp;
+                if (alphabet[0] - alphabet[1] >= 0) break;
             }
         }
     }
+
 
     return value;
 }
@@ -99,6 +91,7 @@ int getBestValue(game_t * gameStack, int move, int depth, int maxDepth, int alph
 int getBestMove(game_t * game, int maxDepth) {
     int bestMove;
     int bestValue;
+    int alphabet[2];
     int player;
     int move;
     int tmp;
@@ -118,7 +111,8 @@ int getBestMove(game_t * game, int maxDepth) {
 /*
  *  Coup non legal
  */
-            tmp = getBestValue(gameStack, move, 1, maxDepth, -INT_MAX, INT_MAX);
+            alphabet[2] = {INT_MAX, -INT_MAX};
+            tmp = getBestValue(gameStack, move, 1, maxDepth, alphabet);
             
             if (tmp >= bestValue) {
                 bestValue = tmp;
