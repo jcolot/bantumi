@@ -33,9 +33,10 @@ int getBestValue(game_t ** gameStack, int move, int depth, int maxDepth, int alp
     
     game_t * gameCpy;
     
-    gameCpy = gameStack[depth];
-    memcpy(gameCpy, gameStack[depth - 1], sizeof(game_t));
-   
+
+    memcpy(gameStack[depth], gameStack[depth - 1], sizeof(game_t));
+    gameCpy = &gameStack[depth];  
+
     player = gameCpy->player;
     doMove(gameCpy, move);
 
