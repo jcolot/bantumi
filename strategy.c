@@ -69,7 +69,7 @@ int getBestValue(game_t * gameStack, int move, int depth, int maxDepth, int alph
  * On ne tient pas compte des coups non-legaux
  */      
             if (gameCpy->board[player][move] > 0) {
-                tmp = getBestValue(gameStack, move, depth + 1, maxDepth, alpha, beta);
+                tmp = getBestValue(gameStack, move, depth + 1, maxDepth, alpha, beta, long long maxTime);
                 if (tmp > value) value = tmp;
                 if (value > alpha) alpha = value;
                 if (beta <= alpha) break;
@@ -81,7 +81,7 @@ int getBestValue(game_t * gameStack, int move, int depth, int maxDepth, int alph
        
             if (gameCpy->board[player][move] > 0) {
                  
-                tmp = getBestValue(gameStack, move, depth + 1, maxDepth, alpha, beta);
+                tmp = getBestValue(gameStack, move, depth + 1, maxDepth, alpha, beta, long long maxTime);
                 if (tmp < value) value = tmp;
                 if (value < beta) beta = value;
                 if (beta <= alpha) break;
@@ -131,7 +131,7 @@ int getBestMove(game_t * game, int maxDepth) {
     return bestMove;
 }
 
-int getBestMoveIterativeDeepening(game_t * game, int time) {
+int getBestMoveIterativeDeepening(game_t * game, int duration) {
     int bestMove;
     int bestValue;
     int player;
@@ -152,9 +152,9 @@ int getBestMoveIterativeDeepening(game_t * game, int time) {
     
     
 /*
- * On laisse 10 sec pour completer
+ * On definit le temps a accorder pour completer
  */
-    maxTime = currentTimestamp() + 1000000;
+    maxTime = currentTimestamp() + (duration * 1000);
 
 /* 
  *    On commence a la profondeur 1
@@ -171,6 +171,11 @@ int getBestMoveIterativeDeepening(game_t * game, int time) {
                 if (tmp >= bestValue) {
                     bestValue = tmp;
                     tmpBestMove = move;
+                } else if (tmp == -INT_MAX) {
+/*
+ *  Si le temps est ecoule:
+ */
+                    return bestMove;
                 }
             }
         depth++;
