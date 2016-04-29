@@ -111,7 +111,9 @@ int getBestMove(game_t * game, int maxDepth) {
 /*
  *  Coup non legal
  */
-            alphabeta[2] = {INT_MAX, -INT_MAX};
+            alphabeta[0] = -INT_MAX;
+            alphabeta[1] = INT_MAX;
+
             tmp = getBestValue(gameStack, move, 1, maxDepth, alphabeta);
             
             if (tmp >= bestValue) {
