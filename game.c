@@ -147,13 +147,13 @@ state_t playGame(game_t * game, int maxDepth) {
         } else {
 
 /*   
- *  On choisi aleatoirement le coup du joueur machine
- *  Dans la troisieme partie du projet, 
- *  on deleguera la strategie a partir d'ici
+ *  getBestMove cherche le meilleur coup en minimax jusqu'a la profondeur maxdepth,
+ *  si maxDepth = 0 alors un coup aleatoire est retourne
  *
  */
             move = getBestMove(game, maxDepth);
-    	    printf("Computer plays %c:\n", move + 'a'); 
+            
+            printf("Computer plays %c:\n", move + 'a'); 
             doMove(game, move);
             displayBoard(game);
         }
