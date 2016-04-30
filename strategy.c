@@ -25,13 +25,13 @@
  * MINIMAX avec elagage alpha-beta
  */
 
-int getBestValue(game_t * gameStack, int move, int depth, int maxDepth, long alphabeta[2]) {
+int getBestValue(game_t * gameStack, int move, int depth, int maxDepth, int alphabeta[2]) {
 
     int value;
     int tmp;
     int minimax;
     player_t player;
-    long alphabetacpy[2];    
+    long alphabetaCpy[2];    
 
     game_t * gameCpy;
     
@@ -66,7 +66,7 @@ int getBestValue(game_t * gameStack, int move, int depth, int maxDepth, long alp
 
     value = -INT_MAX;
 
-    alphabetacpy[!player] = -INT_MAX * minimax;
+    alphabetaCpy[!player] = -INT_MAX * minimax;
     for (move = 0; move < 6; move++) {
 
  /*
@@ -74,10 +74,10 @@ int getBestValue(game_t * gameStack, int move, int depth, int maxDepth, long alp
  */      
         if (gameCpy->board[player][move] > 0) {
 
-            alphabetacpy[0] = alphabeta[0];
-            alphabetacpy[1] = alphabeta[1];
+            alphabetaCpy[0] = alphabeta[0];
+            alphabetaCpy[1] = alphabeta[1];
 
-            tmp = minimax * getBestValue(gameStack, move, depth + 1, maxDepth, alphabetacpy);
+            tmp = minimax * getBestValue(gameStack, move, depth + 1, maxDepth, alphabetaCpy);
             if (tmp > value) {
                 value = tmp;
                 alphabeta[!player] = tmp * minimax;
