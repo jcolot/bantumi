@@ -30,26 +30,26 @@ int getBestValue(game_t * game, int move, int depth, int alpha, int beta) {
     int tmp;
     player_t player;
     
-    game_t * gamecpy;
+    game_t * gameCpy;
 
-    gamecpy = malloc(sizeof(game_t));
-    memcpy(gamecpy, game, sizeof(game_t));
+    gameCpy = malloc(sizeof(game_t));
+    memcpy(gameCpy, game, sizeof(game_t));
    
     player = game->player;
-    doMove(gamecpy, move);
+    doMove(gameCpy, move);
 
-    if (isEndGame(gamecpy)) {
+    if (isEndGame(gameCpy)) {
 /*
  *  Fin de partie, on retourne le value
  */
-        value = evalBoard(gamecpy);
-        free(gamecpy);
+        value = evalBoard(gameCpy);
+        free(gameCpy);
 	    return  value;
     }
 
     if (!depth) {
-        value = evalBoard(gamecpy);
-        free(gamecpy);
+        value = evalBoard(gameCpy);
+        free(gameCpy);
 	    return  value;
     }
     
@@ -70,7 +70,7 @@ int getBestValue(game_t * game, int move, int depth, int alpha, int beta) {
  */      
             if (gameCpy->board[player][move] > 0) {
 
-	        tmp = getBestValue(gamecpy, move, depth - 1, alpha, beta);
+	        tmp = getBestValue(gameCpy, move, depth - 1, alpha, beta);
                 if (tmp > value) value = tmp;
                 if (value > alpha) alpha = value;
                 if (beta <= alpha) break;
@@ -82,7 +82,7 @@ int getBestValue(game_t * game, int move, int depth, int alpha, int beta) {
        
             if (gameCpy->board[player][move] > 0) {
 
-	        tmp = getBestValue(gamecpy, move, depth - 1, alpha, beta);
+	        tmp = getBestValue(gameCpy, move, depth - 1, alpha, beta);
                 if (tmp < value) value = tmp;
                 if (value < beta) beta = value;
                 if (beta <= alpha) break;
@@ -90,7 +90,7 @@ int getBestValue(game_t * game, int move, int depth, int alpha, int beta) {
         }
     }
 
-    free(gamecpy);
+    free(gameCpy);
     return value;
 }
 
