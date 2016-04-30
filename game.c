@@ -152,18 +152,10 @@ state_t playGame(game_t * game, int maxDepth) {
  *  on deleguera la strategie a partir d'ici
  *
  */
-            if (maxDepth == 0) {
-                do {
-                    move = rand() % 6;
-                } while (game->board[computer][move] == 0);
-            } else {
-                move = getBestMove(game, maxDepth); 
-            }
-            
+            move = getBestMove(game, maxDepth);
     	    printf("Computer plays %c:\n", move + 'a'); 
             doMove(game, move);
             displayBoard(game);
-    
         }
     }
 
