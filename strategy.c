@@ -64,10 +64,9 @@ int getBestValue(game_t * game, int move, int depth, int alpha, int beta) {
 
     if (player == computer) {
         value = -INT_MAX;
+        //On ne tient pas compte des coups non-legaux:
         for (move = 0; move < 6; move++) {
- /*
- * On ne tient pas compte des coups non-legaux
- */      
+    
             if (gameCpy->board[player][move] > 0) {
 
 	        tmp = getBestValue(gameCpy, move, depth - 1, alpha, beta);
@@ -110,12 +109,21 @@ int getBestMove(game_t * game, int maxDepth) {
     bestMove = -1;
     bestValue = -INT_MAX;
 
+    // Si maxDepth == 0, on cherche un coup aleatoire 
+    if (! maxDepth) {
+        do {
+            move = rand() % 6;
+        } while (game->board[computer][move] == 0);
+        
+        // On sort de la fonction
+        return move;
+    }
+
     for (move = 0; move < 6; move++) {
+	// On verifie que le coup est valide:
         if (game->board[player][move] != 0) {
-/*
- *  Coup non legal
- */
-	        tmp = getBestValue(game, move, maxDepth, -INT_MAX, INT_MAX);
+
+            tmp = getBestValue(game, move, maxDepth, -INT_MAX, INT_MAX);
 
             if (tmp >= bestValue) {
                 bestValue = tmp;
@@ -123,6 +131,7 @@ int getBestMove(game_t * game, int maxDepth) {
 	        }
         }
     }
+    
     return bestMove;
 }
 
