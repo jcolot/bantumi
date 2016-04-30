@@ -113,6 +113,16 @@ int getBestMove(game_t * game, int maxDepth) {
     player = game->player;
     bestMove = -1;
     bestValue = -INT_MAX;
+    
+        // Si maxDepth == 0, on cherche un coup aleatoire 
+    if (! maxDepth) {
+        do {
+            move = rand() % 6;
+        } while (game->board[player][move] == 0);
+        
+        // On sort de la fonction
+        return move;
+    }
 
     for (move = 0; move < 6; move++) {
         if (game->board[player][move] != 0) {
