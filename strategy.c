@@ -12,6 +12,7 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include <string.h>
+#include <time.h>
 #include <limits.h>
 #include "typedefs.h"
 #include "game.h"
@@ -107,11 +108,23 @@ int getBestMove(game_t * game, int maxDepth) {
     gameStack = (game_t *)malloc(sizeof(game_t) * (maxDepth + 1));
     memcpy(&gameStack[0], game, sizeof(game_t));
 
-    printf("test");
+
 
     player = game->player;
     bestMove = -1;
     bestValue = -INT_MAX;
+    
+/* Si maxDepth == 0, on cherche un coup aleatoire 
+ * parmi les coups legaux
+ */
+    if (! maxDepth) {
+        do {
+            move = rand() % 6;
+        } while (game->board[player][move] == 0);
+        
+        // On sort de la fonction
+        return move;
+    }
 
     for (move = 0; move < 6; move++) {
         if (game->board[player][move] != 0) {
