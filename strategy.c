@@ -25,20 +25,21 @@
  * MINIMAX avec elagage alpha-beta
  */
 
-int getBestValue(game_t * gameStack, int move, int depth, int maxDepth, int alphabeta[2]) {
+int getBestValue(game_t * gameStack, int move, int depth, int maxDepth, long alphabeta[2]) {
 
     int value;
     int tmp;
     int minimax;
     player_t player;
-    
+    long alphabetacpy[2];    
+
     game_t * gameCpy;
     
     memcpy(&gameStack[depth], &gameStack[depth - 1], sizeof(game_t));
     gameCpy = &gameStack[depth];
 
     player = gameCpy->player;
-    minimax = (player - 1) & 1;
+    minimax = (player - 1) | 1;
     doMove(gameCpy, move);
 
     if (isEndGame(gameCpy)) {
@@ -63,24 +64,33 @@ int getBestValue(game_t * gameStack, int move, int depth, int maxDepth, int alph
  *
  */
 
-    value = minimax * INT_MAX;
-        
+    value = -INT_MAX;
+
+    alphabetacpy[!player] = -INT_MAX * minimax;
     for (move = 0; move < 6; move++) {
+
  /*
  * On ne tient pas compte des coups non-legaux
  */      
         if (gameCpy->board[player][move] > 0) {
-            tmp = minimax * getBestValue(gameStack, move, depth + 1, maxDepth, alphabeta);
+
+            alphabetacpy[0] = alphabeta[0];
+            alphabetacpy[1] = alphabeta[1];
+
+            tmp = minimax * getBestValue(gameStack, move, depth + 1, maxDepth, alphabetacpy);
             if (tmp > value) {
                 value = tmp;
-                alphabeta[player] = tmp;
-                if (alphabeta[0] - alphabeta[1] >= 0) break;
+                alphabeta[!player] = tmp * minimax;
+
+                if (alphabeta[1] <= alphabeta[0]) {
+                    break;
+                }
             }
         }
     }
 
 
-    return value;
+    return value * minimax;
 }
 
 /*
@@ -91,7 +101,7 @@ int getBestValue(game_t * gameStack, int move, int depth, int maxDepth, int alph
 int getBestMove(game_t * game, int maxDepth) {
     int bestMove;
     int bestValue;
-    int alphabeta[2];
+    long alphabeta[2];
     int player;
     int move;
     int tmp;
@@ -100,32 +110,19 @@ int getBestMove(game_t * game, int maxDepth) {
     gameStack = (game_t *)malloc(sizeof(game_t) * (maxDepth + 1));
     memcpy(&gameStack[0], game, sizeof(game_t));
 
+
     player = game->player;
     bestMove = -1;
     bestValue = -INT_MAX;
-    
-/* Si maxDepth == 0, on cherche un coup aleatoire 
- * parmi les coups legaux
- */
-    if (! maxDepth) {
-        do {
-            move = rand() % 6;
-        } while (game->board[player][move] == 0);
-        
-        // On sort de la fonction
-        return move;
-    }
-    
-    for (move = 0; move < 6; move++) {
-/*
- *  On Verifie que le coup est legal
- */
-        if (game->board[player][move] != 0) {
 
+    for (move = 0; move < 6; move++) {
+        //  Verifie que le coup est legal
+        if (game->board[player][move] != 0) {
             alphabeta[0] = -INT_MAX;
             alphabeta[1] = INT_MAX;
 
             tmp = getBestValue(gameStack, move, 1, maxDepth, alphabeta);
+            printf("value finale: %d \n\n", tmp);
             
             if (tmp >= bestValue) {
                 bestValue = tmp;
