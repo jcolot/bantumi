@@ -108,8 +108,6 @@ int getBestMove(game_t * game, int maxDepth) {
     gameStack = (game_t *)malloc(sizeof(game_t) * (maxDepth + 1));
     memcpy(&gameStack[0], game, sizeof(game_t));
 
-    printf("test");
-
     player = game->player;
     bestMove = -1;
     bestValue = -INT_MAX;
@@ -176,7 +174,7 @@ int getBestMoveIterativeDeepening(game_t * game, int duration) {
 /*
  *  On verifie si le coup est legal
  */
-                tmp = getBestValue(gameStack, move, 1, depth, -INT_MAX, INT_MAX, long long maxTime);
+                tmp = getBestValue(gameStack, move, 1, depth, -INT_MAX, INT_MAX, maxTime);
             
                 if (tmp >= bestValue) {
                     bestValue = tmp;
