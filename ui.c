@@ -214,7 +214,6 @@ void stateMachine() {
         switch (state) {
 
             case INIT_STATE:
-
 /*
  * Initialisation du jeu
  */
@@ -285,10 +284,6 @@ void stateMachine() {
                         state = INISEEDS_STATE;
                         break;
                         
-                    case 'D':
-                        state = DEPTH_STATE;
-                        break;
-                        
                     case 'P':
                         state = PLAY_STATE;
                         break;
@@ -347,34 +342,6 @@ void stateMachine() {
                 
                 break;
                 
-            case DEPTH_STATE:
-/*
- * Configuration de la profondeur d'arbre a explorer
- * 
- */ 
-                printf ("\nSelect the difficulty level (0 is easiest and 15 is hardest)\n\n");
-                printf("Your choice> ");
-               
-                if (fgets(input, sizeof(input), stdin) != NULL) {
-                   tmp = strtol(input, &p, 10);
-                   
-                    if (input[0] != '\n' && (*p == '\n' || *p == '\0')) {
-                        if (tmp >= 0 && tmp <= 15) {
-                            maxDepth = tmp;
-                            printf ("\nDifficulty level set to %d\n", maxDepth);
-                            state = CONFIG_STATE;
-                        } else {
-                           printf("\nError: entry '%d' is not in range\n", tmp);
-                        }
-                    } else {
-                        printf("\nError: entry is not valid\n");
-                    }
-                } else {
-                    state = FAILURE_STATE;
-                }
-                
-                break;
-                
             case INISEEDS_STATE:
 /*
  * Configuration de la profondeur d'arbre a explorer
@@ -406,7 +373,7 @@ void stateMachine() {
                 
                 break;
                 
-            case FAILURE_STATE :
+            case FAILURE_STATE:
 /*
  * Juste au cas ou, en cas de probleme avec fgets
  */ 
