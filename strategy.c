@@ -127,10 +127,11 @@ int getBestMove(game_t * game, int maxDepth) {
     }
 
     for (move = 0; move < 6; move++) {
-        if (game->board[player][move] != 0) {
 /*
- *  Coup non legal
+ *  On verifie si le coup est legal:
  */
+        if (game->board[player][move] != 0) {
+           
             tmp = getBestValue(gameStack, move, 1, maxDepth, -INT_MAX, INT_MAX);
             
             if (tmp >= bestValue) {
