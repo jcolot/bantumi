@@ -40,10 +40,12 @@ int getBestValue(game_t * gameStack, int move, int depth, int maxDepth, int alph
     player = gameCpy->player;
     doMove(gameCpy, move);
 
-    if (isEndGame(gameCpy)) {
 /*
- *  Fin de partie, on retourne le value
+ *  Fin de partie, on retourne l'evaluation
  */
+
+    if (isEndGame(gameCpy)) {
+
         value = evalBoard(gameCpy);
         return  value;
     }
@@ -61,7 +63,7 @@ int getBestValue(game_t * gameStack, int move, int depth, int maxDepth, int alph
  * les signes
  *
  */
-
+ 
     if (player == computer) {
         value = -INT_MAX;
         for (move = 0; move < 6; move++) {
@@ -70,8 +72,10 @@ int getBestValue(game_t * gameStack, int move, int depth, int maxDepth, int alph
  */      
             if (gameCpy->board[player][move] > 0) {
                 tmp = getBestValue(gameStack, move, depth + 1, maxDepth, alpha, beta);
-                if (tmp > value) value = tmp;
-                if (value > alpha) alpha = value;
+                if (tmp > value) {
+                    value = tmp;
+                    alpha = value;
+                }
                 if (beta <= alpha) break;
             }
         }
@@ -82,13 +86,15 @@ int getBestValue(game_t * gameStack, int move, int depth, int maxDepth, int alph
             if (gameCpy->board[player][move] > 0) {
                  
                 tmp = getBestValue(gameStack, move, depth + 1, maxDepth, alpha, beta);
-                if (tmp < value) value = tmp;
-                if (value < beta) beta = value;
+                if (tmp < value) {
+                    value = tmp;
+                    beta = value;
+                }
                 if (beta <= alpha) break;
             }
         }
     }
-
+    
     return value;
 }
 
