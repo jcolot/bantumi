@@ -20,10 +20,13 @@
 
 
 /*
- * Calcule le meilleur resultat qu'on est assure 
- * d'obtenir dans le "worst case scenario"
- * a une profondeur d'arbre donnee (depth)
- * MINIMAX avec elagage alpha-beta
+ *  Fonction:  getBestValue 
+ *  -----------------------
+ *
+ *  Calcule le meilleur resultat qu'on est assure 
+ *  d'obtenir dans le "worst case scenario"
+ *  a une profondeur d'arbre donnee (depth)
+ *  MINIMAX avec elagage alpha-beta
  */
 
 int getBestValue(game_t * gameStack, int move, int depth, int maxDepth, int alpha, int beta) {
@@ -99,8 +102,11 @@ int getBestValue(game_t * gameStack, int move, int depth, int maxDepth, int alph
 }
 
 /*
- * Calcule le meilleur coup
- * en comparant les meilleurs value
+ *   Fonction:  getBestMove 
+ *   ----------------------
+ *
+ *   Calcule le meilleur coup
+ *   en comparant les meilleurs value
  */
 
 int getBestMove(game_t * game, int maxDepth) {
@@ -149,6 +155,13 @@ int getBestMove(game_t * game, int maxDepth) {
     }
     return bestMove;
 }
+
+/*
+ *   Fonction:  evalBoard
+ *   --------------------
+ *
+ *   Evalue le plateau par difference des scores
+ */
 
 int evalBoard(game_t * game) {
     return game->board[computer][6] - game->board[human][6];
