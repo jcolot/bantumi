@@ -13,6 +13,7 @@
 #include <stdio.h>
 #include <string.h>
 #include <limits.h>
+#include <sys/time.h>
 #include "typedefs.h"
 #include "game.h"
 #include "strategy.h"
@@ -39,6 +40,11 @@ int getBestValue(game_t * gameStack, int move, int depth, int maxDepth, int alph
     player = gameCpy->player;
     doMove(gameCpy, move);
 
+/*
+ * On verifie le temps imparti     
+ */
+    if (currentTimestamp() > maxTime) return -INT_MAX;
+
     if (isEndGame(gameCpy)) {
 /*
  *  Fin de partie, on retourne le value
@@ -52,7 +58,6 @@ int getBestValue(game_t * gameStack, int move, int depth, int maxDepth, int alph
         return  value;
     }
     
-    if (currentTimestamp() > maxTime) return -1;
 /*
  * La boucle principale
  * Si le joueur courant est computer, on cherche le max
@@ -69,9 +74,8 @@ int getBestValue(game_t * gameStack, int move, int depth, int maxDepth, int alph
  * On ne tient pas compte des coups non-legaux
  */      
             if (gameCpy->board[player][move] > 0) {
-                tmp = getBestValue(gameStack, move, depth + 1, maxDepth, alpha, beta, long long maxTime);
-                if (tmp > value) value = tmp;
-                if (value > alpha) alpha = value;
+                tmp = getBestValue(gameStack, move, depth + 1, maxDepth, alpha, beta, maxTime);
+                if (tmp > value) {value = tmp; alpha = tmp;}
                 if (beta <= alpha) break;
             }
         }
@@ -81,9 +85,8 @@ int getBestValue(game_t * gameStack, int move, int depth, int maxDepth, int alph
        
             if (gameCpy->board[player][move] > 0) {
                  
-                tmp = getBestValue(gameStack, move, depth + 1, maxDepth, alpha, beta, long long maxTime);
-                if (tmp < value) value = tmp;
-                if (value < beta) beta = value;
+                tmp = getBestValue(gameStack, move, depth + 1, maxDepth, alpha, beta, maxTime);
+                if (tmp < value) {value = tmp; beta = tmp;}
                 if (beta <= alpha) break;
             }
         }
@@ -94,87 +97,43 @@ int getBestValue(game_t * gameStack, int move, int depth, int maxDepth, int alph
 
 /*
  * Calcule le meilleur coup
- * en comparant les meilleurs value
+ * en comparant les meilleurs value dans le temps imparti
  */
 
-int getBestMove(game_t * game, int maxDepth) {
+int getBestMove(game_t * game, int duration) {
     int bestMove;
     int bestValue;
     int player;
     int move;
     int tmp;
-    
-    game_t * gameStack;
-    gameStack = (game_t *)malloc(sizeof(game_t) * (maxDepth + 1));
-    memcpy(&gameStack[0], game, sizeof(game_t));
-
-    player = game->player;
-    bestMove = -1;
-    bestValue = -INT_MAX;
-    
-        // Si maxDepth == 0, on cherche un coup aleatoire 
-    if (! maxDepth) {
-        do {
-            move = rand() % 6;
-        } while (game->board[player][move] == 0);
-        
-        // On sort de la fonction
-        return move;
-    }
-
-    for (move = 0; move < 6; move++) {
-        if (game->board[player][move] != 0) {
-/*
- *  Coup non legal
- */
-            tmp = getBestValue(gameStack, move, 1, maxDepth, -INT_MAX, INT_MAX);
-            
-            if (tmp >= bestValue) {
-                bestValue = tmp;
-                bestMove = move;
-                
-            }
-        }
-    }
-    return bestMove;
-}
-
-int getBestMoveIterativeDeepening(game_t * game, int duration) {
-    int bestMove;
-    int bestValue;
-    int player;
-    int move;
-    int tmp;
-    int depth;
+    int tmpBestMove;
+    int maxDepth;
     long long maxTime;
     
     game_t * gameStack;
-    gameStack = (game_t *)malloc(sizeof(game_t) * (maxDepth + 1));
+    gameStack = (game_t *)malloc(sizeof(game_t) * (100));
     memcpy(&gameStack[0], game, sizeof(game_t));
-
-    printf("test");
 
     player = game->player;
     bestMove = -1;
     bestValue = -INT_MAX;
-    
     
 /*
  * On definit le temps a accorder pour completer
  */
-    maxTime = currentTimestamp() + (duration * 1000);
+    maxTime = currentTimestamp() + (duration * 300);
 
 /* 
  *    On commence a la profondeur 1
  */
-    depth = 1;
-    while() {
+    maxDepth = 1;
+    while(maxDepth < 100) {
         for (move = 0; move < 6; move++) {
             if (game->board[player][move] != 0) {
 /*
  *  On verifie si le coup est legal
  */
-                tmp = getBestValue(gameStack, move, 1, depth, -INT_MAX, INT_MAX, maxTime);
+                tmp = getBestValue(gameStack, move, 1, maxDepth, -INT_MAX, INT_MAX, maxTime);
             
                 if (tmp >= bestValue) {
                     bestValue = tmp;
@@ -183,16 +142,21 @@ int getBestMoveIterativeDeepening(game_t * game, int duration) {
 /*
  *  Si le temps est ecoule:
  */
+                    free(gameStack);
+                    printf("\n\nComputer stopped searching at depth  %d\n\n", maxDepth - 1);
                     return bestMove;
                 }
             }
-        depth++;
         }
+
 /* A chaque fin d'iteration, on conserve le meilleur coup        
  *
  */
+        maxDepth++;
         bestMove = tmpBestMove;
     }
+
+    free(gameStack);
     return bestMove;
 }
 
