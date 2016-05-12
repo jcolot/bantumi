@@ -3,6 +3,8 @@
    strategy.c
    ----------
 
+  Implementation de la strategie Minimax
+
   $Author: julien colot $
 
   Copyleft
@@ -19,11 +21,15 @@
 #include "strategy.h"
 
 
-/*
+/* 
+ *  Fonction:  getBestValue
+ *  -----------------------
+ *
  * Calcule le meilleur resultat qu'on est assure 
  * d'obtenir dans le "worst case scenario"
  * a une profondeur d'arbre donnee (depth)
  * MINIMAX avec elagage alpha-beta
+ * modifie pour le iterative-deepening
  */
 
 int getBestValue(game_t * gameStack, int move, int depth, int maxDepth, int alpha, int beta, long long maxTime) {
@@ -41,7 +47,8 @@ int getBestValue(game_t * gameStack, int move, int depth, int maxDepth, int alph
     doMove(gameCpy, move);
 
 /*
- * On verifie le temps imparti     
+ * On verifie le temps imparti, si le temps est passe, 
+ * on renvoie -INT_MAX comme signal pour getBestMove     
  */
     if (currentTimestamp() > maxTime) return -INT_MAX;
 
@@ -96,6 +103,9 @@ int getBestValue(game_t * gameStack, int move, int depth, int maxDepth, int alph
 }
 
 /*
+ *  Fonction:  getBestMove
+ *  -----------------------
+ *
  * Calcule le meilleur coup
  * en comparant les meilleurs value dans le temps imparti
  */
@@ -160,13 +170,27 @@ int getBestMove(game_t * game, int duration) {
     return bestMove;
 }
 
+/*  Fonction:  evalBoard
+ *  --------------------
+ *
+ * Retourne la difference des scores pour evaluer
+ * la valeur du plateau
+ */
+
+int evalBoard(game_t * game) {
+    return game->board[computer][6] - game->board[human][6];
+}
+
+/*  Fonction:  currentTimestamp
+ *  ---------------------------
+ *
+ * Retourne le temps en miillisecond
+ * function trouvee sur le web
+ */
+
 long long currentTimestamp() {
     struct timeval te; 
     gettimeofday(&te, NULL);
     long long milliseconds = te.tv_sec*1000LL + te.tv_usec/1000; 
     return milliseconds;
-}
-
-int evalBoard(game_t * game) {
-    return game->board[computer][6] - game->board[human][6];
 }
