@@ -117,13 +117,10 @@ int getBestMove(game_t * game, int maxDepth) {
     int player;
     int move;
     int tmp;
-    
+
     game_t * gameStack;
     gameStack = (game_t *)malloc(sizeof(game_t) * (maxDepth + 1));
     memcpy(&gameStack[0], game, sizeof(game_t));
-
-
-
     player = game->player;
     bestMove = -1;
     bestValue = -INT_MAX;
