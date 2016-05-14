@@ -13,7 +13,14 @@
 #include <stdlib.h>
 #include <strings.h>
 #include <time.h>
-#include "ui.h" 
+#include "ui.h"
+
+/*  Function main
+ *  -------------
+ *
+ *  Point d'entree du jeu, delegue directement a la fonction stateMachine
+ */
+
 
 int main(){
 
