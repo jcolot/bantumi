@@ -19,10 +19,13 @@
 
 
 /*
- * Calcule le meilleur resultat qu'on est assure 
- * d'obtenir dans le "worst case scenario"
- * a une profondeur d'arbre donnee (depth)
- * MINIMAX avec elagage alpha-beta
+ *  Fonction:  getBestValue 
+ *  -----------------------
+ *
+ *  Calcule le meilleur resultat qu'on est assure 
+ *  d'obtenir dans le "worst case scenario"
+ *  a une profondeur d'arbre donnee (depth)
+ *  NEGAMAX avec elagage alpha-beta
  */
 
 int getBestValue(game_t * gameStack, int move, int depth, int maxDepth, int alphabeta[2]) {
@@ -44,17 +47,19 @@ int getBestValue(game_t * gameStack, int move, int depth, int maxDepth, int alph
 
     if (isEndGame(gameCpy)) {
 /*
- *  Fin de partie, on retourne le value
+ *  Fin de partie, on retourne la valeur maximin
  */
         value = evalBoard(gameCpy);
         return  value;
     }
 
     if (depth == maxDepth) {
+/*
+ *  Profondeur max, on retourne la valeur maximin
+ */
         value = evalBoard(gameCpy);
         return  value;
     }
-    
 /*
  * La boucle principale
  * Si le joueur courant est computer, on cherche le max
@@ -68,34 +73,34 @@ int getBestValue(game_t * gameStack, int move, int depth, int maxDepth, int alph
 
     alphabetaCpy[!player] = -INT_MAX * minimax;
     for (move = 0; move < 6; move++) {
-
- /*
+/*
  * On ne tient pas compte des coups non-legaux
  */      
         if (gameCpy->board[player][move] > 0) {
-
             alphabetaCpy[0] = alphabeta[0];
             alphabetaCpy[1] = alphabeta[1];
-
             tmp = minimax * getBestValue(gameStack, move, depth + 1, maxDepth, alphabetaCpy);
             if (tmp > value) {
                 value = tmp;
                 alphabeta[!player] = tmp * minimax;
-
                 if (alphabeta[1] <= alphabeta[0]) {
                     break;
                 }
             }
         }
     }
-
-
+/* 
+ * Retourne la valeur coup
+ */
     return value * minimax;
 }
 
 /*
- * Calcule le meilleur coup
- * en comparant les meilleurs value
+ *   Fonction:  getBestMove 
+ *   ----------------------
+ *
+ *   Calcule le meilleur coup
+ *   en comparant les meilleurs valeurs maximin
  */
 
 int getBestMove(game_t * game, int maxDepth) {
@@ -133,6 +138,13 @@ int getBestMove(game_t * game, int maxDepth) {
     }
     return bestMove;
 }
+
+/*
+ *   Fonction:  evalBoard
+ *   --------------------
+ *
+ *   Evalue le plateau par difference des scores
+ */
 
 int evalBoard(game_t * game) {
     return game->board[computer][6] - game->board[human][6];
