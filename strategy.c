@@ -72,7 +72,7 @@ int getBestValue(game_t * gameStack, int move, int depth, int maxDepth, int alph
     if (player == computer) {
         value = -INT_MAX;
         for (move = 0; move < 6; move++) {
- /*
+/*
  * On ne tient pas compte des coups non-legaux
  */      
             if (gameCpy->board[player][move] > 0) {
