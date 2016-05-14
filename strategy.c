@@ -48,10 +48,12 @@ int getBestValue(game_t * gameStack, int move, int depth, int maxDepth, int alph
  */
 
     if (isEndGame(gameCpy)) {
-
         value = evalBoard(gameCpy);
         return  value;
     }
+/*
+ *  Profondeur max, on retourne l'evaluation
+ */
 
     if (depth == maxDepth) {
         value = evalBoard(gameCpy);
