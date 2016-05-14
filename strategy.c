@@ -32,7 +32,7 @@ int getBestValue(game_t * gameStack, int move, int depth, int maxDepth, int alph
 
     int value;
     int tmp;
-    int minimax;
+    int negamax;
     player_t player;
     long alphabetaCpy[2];    
 
@@ -42,12 +42,16 @@ int getBestValue(game_t * gameStack, int move, int depth, int maxDepth, int alph
     gameCpy = &gameStack[depth];
 
     player = gameCpy->player;
-    minimax = (player - 1) | 1;
+    
+/* On definit un facteur NEGAMAX qui change le signe 
+ * de la valeur retournee en fonction du joueur
+ */
+    negamax = (player - 1) | 1;
     doMove(gameCpy, move);
 
     if (isEndGame(gameCpy)) {
 /*
- *  Fin de partie, on retourne la valeur maximin
+ *  Fin de partie, on retourne l'evaluation
  */
         value = evalBoard(gameCpy);
         return  value;
@@ -55,7 +59,7 @@ int getBestValue(game_t * gameStack, int move, int depth, int maxDepth, int alph
 
     if (depth == maxDepth) {
 /*
- *  Profondeur max, on retourne la valeur maximin
+ *  Profondeur max, on retourne l'evaluation
  */
         value = evalBoard(gameCpy);
         return  value;
@@ -68,10 +72,11 @@ int getBestValue(game_t * gameStack, int move, int depth, int maxDepth, int alph
  * les signes
  *
  */
-
     value = -INT_MAX;
-
-    alphabetaCpy[!player] = -INT_MAX * minimax;
+/* 
+ * On initialise alpha ou beta dans l'array a sa valeur en fonction du joueur
+ */
+    alphabetaCpy[!player] = -INT_MAX * negamax;
     for (move = 0; move < 6; move++) {
 /*
  * On ne tient pas compte des coups non-legaux
@@ -79,10 +84,16 @@ int getBestValue(game_t * gameStack, int move, int depth, int maxDepth, int alph
         if (gameCpy->board[player][move] > 0) {
             alphabetaCpy[0] = alphabeta[0];
             alphabetaCpy[1] = alphabeta[1];
-            tmp = minimax * getBestValue(gameStack, move, depth + 1, maxDepth, alphabetaCpy);
+            tmp = negamax * getBestValue(gameStack, move, depth + 1, maxDepth, alphabetaCpy);
             if (tmp > value) {
                 value = tmp;
-                alphabeta[!player] = tmp * minimax;
+/* 
+ * On met a jour soit alpha soit beta dans l'array en fonction du joueur
+ */
+                alphabeta[!player] = tmp * negamax;
+/*
+ * elagage alpha-beta
+ */
                 if (alphabeta[1] <= alphabeta[0]) {
                     break;
                 }
@@ -92,7 +103,7 @@ int getBestValue(game_t * gameStack, int move, int depth, int maxDepth, int alph
 /* 
  * Retourne la valeur coup
  */
-    return value * minimax;
+    return value * negamax;
 }
 
 /*
