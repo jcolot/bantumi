@@ -1,3 +1,14 @@
+/************************************************
+    game.c
+    ------
+    
+    Contient les fonctions qui implementent les
+    regles du jeu
+    
+    $Author: julien colot $
+    Copyleft
+************************************************/
+
 #ifndef GAME_H
 #define GAME_H
 #include "typedefs.h"
