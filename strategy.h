@@ -1,8 +1,13 @@
-/********************************************************/
-/*                                                      */
-/* Implemente la strategie suivant l'algorithme minimax */
-/*                                                      */
-/********************************************************/
+/************************************************
+   strategy.c
+   ----------
+   
+   Implemente la strategie suivant l'algorithme
+   minimax
+   
+  $Author: julien colot $
+  Copyleft
+************************************************/
 
 #ifndef STRATEGY_H
 #define STRATEGY_H
