@@ -1,12 +1,12 @@
 /************************************************
-
-   strategy.c
-   ----------
-
-  $Author: julien colot $
-
-  Copyleft
-
+    strategy.c
+    ----------
+   
+    Implemente la strategie suivant l'algorithme
+    minimax
+   
+    $Author: julien colot $
+    Copyleft
 ************************************************/
 
 #include <stdlib.h>
