@@ -1,3 +1,3 @@
 # bantumi
 
-Implementation pour le cours "projet de programmation" a l'universite de Namur
+Bantumi implementation for the programmation course in Universite de Namur 
